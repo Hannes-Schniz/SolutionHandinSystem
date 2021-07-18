@@ -4,9 +4,12 @@ public class HandIn extends Text{
 
     private boolean correccted;
 
-    public HandIn(String text) {
+    private Question original;
+
+    public HandIn(String text, Question original) {
         super(text);
         this.correccted = false;
+        this.original = original;
     }
 
     public boolean isCorreccted() {
@@ -15,5 +18,9 @@ public class HandIn extends Text{
 
     public void setCorreccted(boolean correccted) {
         this.correccted = correccted;
+    }
+
+    public Question getOriginal() {
+        return original;
     }
 }

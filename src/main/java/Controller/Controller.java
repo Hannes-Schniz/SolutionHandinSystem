@@ -1,6 +1,7 @@
 package Controller;
 
 import Human.*;
+import Texts.HandIn;
 import Texts.Question;
 import Texts.Text;
 
@@ -16,15 +17,17 @@ public class Controller {
 
     private static String USER_STUDENT = "Student";
 
+    private static int ZERO = 0;
+
     private HashMap<String, User> userList;
 
-    private HashMap<Question, Text[][]> questions;
+    private HashMap<Question, List<Text[]>> questions;
 
     private UI userInterface;
 
     public Controller( UI userInterface) {
         this.userList = new HashMap<String, User>();
-        this.questions = new HashMap<Question, Text[][]>();
+        this.questions = new HashMap<Question, List<Text[]>>();
         this.userInterface = userInterface;
     }
 
@@ -32,7 +35,7 @@ public class Controller {
         return userList;
     }
 
-    public HashMap<Question, Text[][]> getTextList() {
+    public HashMap<Question, List<Text[]>> getTextList() {
         return questions;
     }
 
@@ -59,4 +62,40 @@ public class Controller {
         }
         throw new KeyAlreadyExistsException("Question already exists");
     }
+
+    public void handIn(HandIn handIn){
+        int check = checkForHandIn(questions.get(handIn.getOriginal()) , handIn);
+        if (questions.containsKey(handIn.getOriginal())){
+            List<Text[]> working = questions.get(handIn.getOriginal());
+            Text[] input = genInput(handIn);
+            if (check == -1){
+                working.add(input);
+            }
+            else
+            {
+                working.set(check, input);
+            }
+            questions.put(handIn.getOriginal(), working);
+        }
+
+    }
+
+    private Text[] genInput(HandIn handIn){
+        Text[] input = new Text[2];
+        input[0] = handIn;
+        input[1] = null;
+        return input;
+    }
+
+    private int checkForHandIn(List<Text[]> input, HandIn handIn){
+
+        for (int i = 0; i < input.size(); i++) {
+            if (input.get(i)[ZERO].equals(handIn)){
+                return i;
+            }
+        }
+        return -1;
+
+    }
+
 }

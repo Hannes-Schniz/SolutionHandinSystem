@@ -1,9 +1,12 @@
 package Controller;
 
 import Human.*;
+import Texts.Question;
 import Texts.Text;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
 import java.util.HashMap;
+import java.util.List;
 
 public class Controller {
 
@@ -15,13 +18,13 @@ public class Controller {
 
     private HashMap<String, User> userList;
 
-    private HashMap<String, Text> textList;
+    private HashMap<Question, Text[][]> questions;
 
     private UI userInterface;
 
     public Controller( UI userInterface) {
         this.userList = new HashMap<String, User>();
-        this.textList = new HashMap<String, Text>();
+        this.questions = new HashMap<Question, Text[][]>();
         this.userInterface = userInterface;
     }
 
@@ -29,8 +32,8 @@ public class Controller {
         return userList;
     }
 
-    public HashMap<String, Text> getTextList() {
-        return textList;
+    public HashMap<Question, Text[][]> getTextList() {
+        return questions;
     }
 
     public UI getUserInterface() {
@@ -47,5 +50,13 @@ public class Controller {
         else if (newUser.getClass().equals(Student.class)){
             userList.put(USER_STUDENT , newUser);
         }
+    }
+
+    public void addQuestion(Question question){
+        if (!questions.containsKey(question)){
+            questions.put(question, null);
+            return;
+        }
+        throw new KeyAlreadyExistsException("Question already exists");
     }
 }

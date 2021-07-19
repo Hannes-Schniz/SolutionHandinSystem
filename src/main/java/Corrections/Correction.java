@@ -2,8 +2,9 @@ package Corrections;
 
 import Human.Tutor;
 import Texts.HandIn;
+import Texts.Text;
 
-public class Correction {
+public class Correction extends Text {
 
     private int mark;
 
@@ -16,6 +17,7 @@ public class Correction {
     private int version;
 
     public Correction(int mark, HandIn original, Tutor tutor, int version) {
+        super("");
         this.mark = mark;
         this.tutor = tutor;
         this.version = version;

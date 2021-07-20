@@ -11,17 +11,17 @@ public class PlagiarismFinder {
 
     private Dozent searcher;
 
-    private Question original;
+    private Question originalQuestion;
 
     /**
      * Instantiates a new Plagiarism finder.
      *
      * @param searcher the searcher
-     * @param original the original
+     * @param originalQuestion the original
      */
-    public PlagiarismFinder(Dozent searcher, Question original) {
+    public PlagiarismFinder(Dozent searcher, Question originalQuestion) {
         this.searcher = searcher;
-        this.original = original;
+        this.originalQuestion = originalQuestion;
     }
 
     /**

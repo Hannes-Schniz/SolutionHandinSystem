@@ -5,7 +5,7 @@ import Human.User;
 
 public class HandIn extends Text{
 
-    private boolean correccted;
+    private boolean corrected;
 
     private Question original;
 
@@ -13,17 +13,17 @@ public class HandIn extends Text{
 
     public HandIn(String text, Question original, Student student) {
         super(text);
-        this.correccted = false;
+        this.corrected = false;
         this.original = original;
         this.student = student;
     }
 
-    public boolean isCorreccted() {
-        return correccted;
+    public boolean isCorrected() {
+        return corrected;
     }
 
-    public void setCorreccted(boolean correccted) {
-        this.correccted = correccted;
+    public void setCorrected(boolean corrected) {
+        this.corrected = corrected;
     }
 
     public Question getOriginal() {

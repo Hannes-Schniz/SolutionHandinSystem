@@ -1,6 +1,7 @@
 package Texts;
 
 import Human.Student;
+import Human.User;
 
 public class HandIn extends Text{
 
@@ -29,7 +30,7 @@ public class HandIn extends Text{
         return original;
     }
 
-    public Student getStudent() {
+    public User getProducer(){
         return student;
     }
 }

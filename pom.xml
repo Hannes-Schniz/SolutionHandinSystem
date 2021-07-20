@@ -20,7 +20,7 @@
                             <classpathPrefix>lib/</classpathPrefix>
                             <classpathLayoutType>repository</classpathLayoutType>
                             <useUniqueVersions>false</useUniqueVersions>
-                            <mainClass>//fill in </mainClass>
+                            <mainClass>Main.main </mainClass>
                         </manifest>
                     </archive>
                 </configuration>

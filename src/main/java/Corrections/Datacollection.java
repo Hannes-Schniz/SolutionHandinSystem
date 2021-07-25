@@ -60,12 +60,7 @@ public class Datacollection {
     }
 
     public boolean hasPlagiarism(){
-        if (this.length == -1){
-            return false;
-        }
-        else{
-            return true;
-        }
+        return this.length != MINUS_ONE;
     }
 
 }

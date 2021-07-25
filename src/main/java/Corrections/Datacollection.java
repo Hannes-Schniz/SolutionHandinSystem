@@ -59,4 +59,13 @@ public class Datacollection {
         this.percent = percent;
     }
 
+    public boolean hasPlagiarism(){
+        if (this.length == -1){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
 }

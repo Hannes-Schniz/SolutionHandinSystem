@@ -31,17 +31,13 @@ public class Controller {
 
     private HashMap<Question, List<Text[]>> questions;
 
-    private UI userInterface;
-
     /**
      * Instantiates a new Controller.
      *
-     * @param userInterface the user interface
      */
-    public Controller( UI userInterface) {
+    public Controller() {
         this.userList = new HashMap<String, User>();
         this.questions = new HashMap<Question, List<Text[]>>();
-        this.userInterface = userInterface;
     }
 
     /**
@@ -60,15 +56,6 @@ public class Controller {
      */
     public HashMap<Question, List<Text[]>> getTextList() {
         return questions;
-    }
-
-    /**
-     * Gets user interface.
-     *
-     * @return the user interface
-     */
-    public UI getUserInterface() {
-        return userInterface;
     }
 
     /**

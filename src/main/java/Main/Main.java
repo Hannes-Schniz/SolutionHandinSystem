@@ -39,49 +39,33 @@ public class Main {
         setup();
         try {
             boolean go = true;
-            while (go){
+            while (go) {
                 String input = terminal.readln();
-                if (!input.equals("")){
+                if (!input.equals("")) {
                     String[] userInput = parser.parseInput(input);
-                    if (!commands.containsKey(userInput[ZERO])){
+                    if (!commands.containsKey(userInput[ZERO])) {
                         terminal.println("command does not exist");
                     }
                     else {
                         CommandsEnum command = commands.get(userInput[ZERO]);
-                        switch (command){
+                        switch (command) {
                             case ADD_INSTRUCTOR:
-                                Dozent newDozent = new Dozent(userInput[ONE]);
-                                cntrl.addUser(newDozent);
+                                cntrl.addUser(new Dozent(userInput[ONE]));
                                 break;
                             case LIST_INSTRUCTOR:
-                                if (!cntrl.hasUser(UserEnum.DOZENT)){
-                                    break;
-                                }
-                                printUser(UserEnum.DOZENT);
+                                listInstructors();
                                 break;
                             case ADD_TUTOR:
-                                Tutor newTutor = new Tutor(userInput[ONE]);
-                                cntrl.addUser(newTutor);
+                                cntrl.addUser(new Tutor(userInput[ONE]));
                                 break;
                             case LIST_TUTOR:
-                                if (!cntrl.hasUser(UserEnum.TUTOR)){
-                                    break;
-                                }
-                                printUser(UserEnum.TUTOR);
+                                listTutors();
                                 break;
                             case ADD_STUDENT:
-                                if (!userInput[TWO].matches("[0-9]{6}")){
-                                    terminal.println("id wrong length");
-                                    break;
-                                }
-                                Student newStudent = new Student(userInput[ONE], parser.parseNumber(userInput[TWO]));
-                                cntrl.addUser(newStudent);
+                                addStudent(userInput);
                                 break;
                             case LIST_STUDENT:
-                                if (!cntrl.hasUser(UserEnum.STUDENT)){
-                                    break;
-                                }
-                                printUser(UserEnum.STUDENT);
+                                listStudents();
                                 break;
                             case ADD_ASIGNMENT:
                                 break;
@@ -113,15 +97,15 @@ public class Main {
                 }
             }
         }
-        catch (IOException e){
+        catch (IOException e) {
             terminal.printError(e.getMessage());
         }
-        catch (IllegalArgumentException e){
+        catch (IllegalArgumentException e) {
             terminal.printError(e.getMessage());
         }
     }
 
-    private static void setup(){
+    private static void setup() {
         cntrl = new Controller();
         terminal = new Terminal();
         parser = new Parser();
@@ -129,10 +113,10 @@ public class Main {
         fillMap();
     }
 
-    private static void printUser(UserEnum key){
+    private static void printUser(UserEnum key) {
         User[] listUsers = cntrl.getUserList(key);
         String[] nameString = new String[listUsers.length];
-        if (key.equals(UserEnum.STUDENT)){
+        if (key.equals(UserEnum.STUDENT)) {
             for (int i = 0; i < listUsers.length; i++) {
                 nameString[i] = listUsers[i].getName() + " (" + ((Student) listUsers[i]).getId() + ")";
             }
@@ -146,7 +130,33 @@ public class Main {
 
     }
 
-    private static void fillMap(){
+    private static void listInstructors() {
+        if (cntrl.hasUser(UserEnum.DOZENT)) {
+            printUser(UserEnum.DOZENT);
+        }
+    }
+
+    private static void listTutors() {
+        if (cntrl.hasUser(UserEnum.TUTOR)) {
+            printUser(UserEnum.TUTOR);
+        }
+    }
+
+    private static void addStudent(String[] userInput) {
+        if (!userInput[TWO].matches("[0-9]{6}")) {
+            terminal.println("id wrong length");
+            return;
+        }
+        cntrl.addUser(new Student(userInput[ONE], parser.parseNumber(userInput[TWO])));
+    }
+
+    private static void listStudents() {
+        if (cntrl.hasUser(UserEnum.STUDENT)) {
+            printUser(UserEnum.STUDENT);
+        }
+    }
+
+    private static void fillMap() {
         commands.put("instructor", CommandsEnum.ADD_INSTRUCTOR);
         commands.put("list-instructors", CommandsEnum.LIST_INSTRUCTOR);
         commands.put("tutor", CommandsEnum.ADD_TUTOR);

@@ -14,14 +14,15 @@ import java.util.List;
  * The type Controller.
  *
  * @author Hannes Schniz
+ * @version 0.1
  */
 public class Controller {
 
-    private static String USER_DOZENT = "Dozent";
+    private static final String USER_DOZENT = "Dozent";
 
-    private static String USER_TUTOR = "Tutor";
+    private static final String USER_TUTOR = "Tutor";
 
-    private static String USER_STUDENT = "Student";
+    private static final String USER_STUDENT = "Student";
 
     private static int ZERO = 0;
 
@@ -36,20 +37,22 @@ public class Controller {
      *
      */
     public Controller() {
-        this.userList = new HashMap<UserEnum,User[]>();
+        this.userList = new HashMap<UserEnum, User[]>();
         this.questions = new HashMap<Question, List<Text[]>>();
     }
 
     /**
      * Gets user list.
      *
-     * @return the user list
+     * @param key the Key
+     *
+     * @return user list
      */
     public User[] getUserList(UserEnum key) {
         return userList.get(key);
     }
 
-    public boolean hasUser(UserEnum key){
+    public boolean hasUser(UserEnum key) {
         return userList.containsKey(key);
     }
 
@@ -67,35 +70,35 @@ public class Controller {
      *
      * @param newUser the new user
      */
-    public void addUser(User newUser){
-        if (newUser.getClass().equals(Dozent.class)){
+    public void addUser(User newUser) {
+        if (newUser.getClass().equals(Dozent.class)) {
             addToHashMap(UserEnum.DOZENT, newUser);
         }
-        else if (newUser.getClass().equals(Tutor.class)){
+        else if (newUser.getClass().equals(Tutor.class)) {
             addToHashMap(UserEnum.TUTOR, newUser);
         }
-        else if (newUser.getClass().equals(Student.class)){
+        else if (newUser.getClass().equals(Student.class)) {
             addToHashMap(UserEnum.STUDENT, newUser);
         }
     }
 
-    private void addToHashMap(UserEnum key, User newUser){
-        if (!userList.containsKey(key)){
+    private void addToHashMap(UserEnum key, User newUser) {
+        if (!userList.containsKey(key)) {
             User[] in = {newUser};
-            userList.put(key,in);
+            userList.put(key, in);
         }
         else {
-            User[] new_User = extendUser(userList.get(key));
-            new_User[new_User.length - 1] = newUser;
-            userList.put(key, new_User);
+            User[] newerUser = extendUser(userList.get(key));
+            newerUser[newerUser.length - 1] = newUser;
+            userList.put(key, newerUser);
         }
     }
 
-    private User[] extendUser(User[] input){
-        User[] old_User = input;
+    private User[] extendUser(User[] input) {
+        User[] oldUser = input;
         input = new User[input.length + 1];
-        for (int i = 0; i < old_User.length; i++) {
-            input[i] = old_User[i];
+        for (int i = 0; i < oldUser.length; i++) {
+            input[i] = oldUser[i];
         }
         return input;
     }
@@ -105,8 +108,8 @@ public class Controller {
      *
      * @param question the question
      */
-    public void addQuestion(Question question){
-        if (!questions.containsKey(question)){
+    public void addQuestion(Question question) {
+        if (!questions.containsKey(question)) {
             questions.put(question, null);
             return;
         }
@@ -118,8 +121,8 @@ public class Controller {
      *
      * @param handIn the handIn
      */
-    public void handIn(HandIn handIn){
-        if (questions.containsKey(handIn.getOriginal())){ //if the question exists proceed
+    public void handIn(HandIn handIn) {
+        if (questions.containsKey(handIn.getOriginal())) { //if the question exists proceed
 
             List<Text[]> working = questions.get(handIn.getOriginal());
             int check = checkForHandIn(working , handIn);
@@ -129,7 +132,7 @@ public class Controller {
             }
             else //if there is a handIn it changes it
             {
-                working.set(check, genInput(handIn, (Correction)working.get(check)[ONE]));
+                working.set(check, genInput(handIn, (Correction) working.get(check)[ONE]));
             }
             questions.put(handIn.getOriginal(), working);
         }
@@ -143,7 +146,7 @@ public class Controller {
      * @param correction existing correction
      * @return generated input array
      */
-    private Text[] genInput(HandIn handIn, Correction correction){
+    private Text[] genInput(HandIn handIn, Correction correction) {
         Text[] input = new Text[2];
         input[0] = handIn;
         input[1] = correction;
@@ -157,10 +160,10 @@ public class Controller {
      * @param handIn new handIn
      * @return position of the previous hand in
      */
-    private int checkForHandIn(List<Text[]> allHandIns, HandIn handIn){
+    private int checkForHandIn(List<Text[]> allHandIns, HandIn handIn) {
 
         for (int i = 0; i < allHandIns.size(); i++) {
-            if (allHandIns.get(i)[ZERO].getProducer().equals(handIn.getProducer())){
+            if (allHandIns.get(i)[ZERO].getProducer().equals(handIn.getProducer())) {
                 return i;
             }
         }

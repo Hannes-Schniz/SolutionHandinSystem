@@ -19,7 +19,7 @@ public class Parser {
         int spaces = ZERO;
         String[] returnArray = new String[ONE];
 
-        if (!input.matches("[-a-zA-Z0-9_]")){
+        if (!input.matches("[-a-zA-Z0-9_\\s.!?,]*")){
             throw new IllegalArgumentException("wrong Input");
         }
 
@@ -27,29 +27,30 @@ public class Parser {
             if (input.charAt(i) == ' '){
                 if (spaces == ZERO){
                     returnArray[ZERO] = parted;
+                    parted = "";
                 }
                 else {
-                    extendArray(returnArray);
+                    returnArray = extendArray(returnArray);
                     returnArray[returnArray.length - ONE] = parted;
+                    parted = "";
                 }
                 spaces++;
             }
             else {
                 parted += input.charAt(i);
             }
+            if (i == input.length() - ONE){
+                returnArray = extendArray(returnArray);
+                returnArray[spaces] = parted;
+            }
         }
-
-        if (spaces < 2){
-            throw new IllegalArgumentException("input too short");
-        }
-
         return returnArray;
     }
 
     private String[] extendArray(String[] input){
 
         String[] workingArray = input;
-        input = new String[input.length + ONE];
+        input = new String[workingArray.length + ONE];
 
         for (int i = 0; i < workingArray.length; i++) {
             input[i] = workingArray[i];
@@ -60,7 +61,7 @@ public class Parser {
 
     public int parseNumber(String input) throws IllegalArgumentException{
 
-        if (!input.matches("[0-9]")){
+        if (!input.matches("[0-9]*")){
             throw new IllegalArgumentException("wrong input");
         }
 

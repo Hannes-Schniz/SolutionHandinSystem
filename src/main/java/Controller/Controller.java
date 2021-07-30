@@ -27,7 +27,7 @@ public class Controller {
 
     private static int ONE = 1;
 
-    private HashMap<String, User> userList;
+    private HashMap<UserEnum, User[]> userList;
 
     private HashMap<Question, List<Text[]>> questions;
 
@@ -36,7 +36,7 @@ public class Controller {
      *
      */
     public Controller() {
-        this.userList = new HashMap<String, User>();
+        this.userList = new HashMap<UserEnum,User[]>();
         this.questions = new HashMap<Question, List<Text[]>>();
     }
 
@@ -45,8 +45,12 @@ public class Controller {
      *
      * @return the user list
      */
-    public HashMap<String, User> getUserList() {
-        return userList;
+    public User[] getUserList(UserEnum key) {
+        return userList.get(key);
+    }
+
+    public boolean hasUser(UserEnum key){
+        return userList.containsKey(key);
     }
 
     /**
@@ -65,14 +69,35 @@ public class Controller {
      */
     public void addUser(User newUser){
         if (newUser.getClass().equals(Dozent.class)){
-            userList.put(USER_DOZENT , newUser);
+            addToHashMap(UserEnum.DOZENT, newUser);
         }
         else if (newUser.getClass().equals(Tutor.class)){
-            userList.put(USER_TUTOR , newUser);
+            addToHashMap(UserEnum.TUTOR, newUser);
         }
         else if (newUser.getClass().equals(Student.class)){
-            userList.put(USER_STUDENT , newUser);
+            addToHashMap(UserEnum.STUDENT, newUser);
         }
+    }
+
+    private void addToHashMap(UserEnum key, User newUser){
+        if (!userList.containsKey(key)){
+            User[] in = {newUser};
+            userList.put(key,in);
+        }
+        else {
+            User[] new_User = extendUser(userList.get(key));
+            new_User[new_User.length - 1] = newUser;
+            userList.put(key, new_User);
+        }
+    }
+
+    private User[] extendUser(User[] input){
+        User[] old_User = input;
+        input = new User[input.length + 1];
+        for (int i = 0; i < old_User.length; i++) {
+            input[i] = old_User[i];
+        }
+        return input;
     }
 
     /**

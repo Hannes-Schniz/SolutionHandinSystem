@@ -2,17 +2,25 @@ package Main;
 
 import Controller.Controller;
 import Human.Dozent;
+import Human.Student;
+import Human.Tutor;
+import Human.User;
 import Interface.Parser;
 import Interface.Terminal;
 import java.io.IOException;
 import java.util.HashMap;
+import Controller.UserEnum;
 
 /**
  * The type Main.
  */
 public class Main {
 
+    private static final int ONE = 1;
+
     private static final int ZERO = 0;
+
+    private static final int TWO = 2;
 
     private static Controller cntrl;
 
@@ -39,21 +47,41 @@ public class Main {
                         terminal.println("command does not exist");
                     }
                     else {
-                        CommandsEnum command = commands.get(userInput[0]);
+                        CommandsEnum command = commands.get(userInput[ZERO]);
                         switch (command){
                             case ADD_INSTRUCTOR:
-                                Dozent newDozent = new Dozent(userInput[1]);
+                                Dozent newDozent = new Dozent(userInput[ONE]);
                                 cntrl.addUser(newDozent);
                                 break;
                             case LIST_INSTRUCTOR:
+                                if (!cntrl.hasUser(UserEnum.DOZENT)){
+                                    break;
+                                }
+                                printUser(UserEnum.DOZENT);
                                 break;
                             case ADD_TUTOR:
+                                Tutor newTutor = new Tutor(userInput[ONE]);
+                                cntrl.addUser(newTutor);
                                 break;
                             case LIST_TUTOR:
+                                if (!cntrl.hasUser(UserEnum.TUTOR)){
+                                    break;
+                                }
+                                printUser(UserEnum.TUTOR);
                                 break;
                             case ADD_STUDENT:
+                                if (!userInput[TWO].matches("[0-9]{6}")){
+                                    terminal.println("id wrong length");
+                                    break;
+                                }
+                                Student newStudent = new Student(userInput[ONE], parser.parseNumber(userInput[TWO]));
+                                cntrl.addUser(newStudent);
                                 break;
                             case LIST_STUDENT:
+                                if (!cntrl.hasUser(UserEnum.STUDENT)){
+                                    break;
+                                }
+                                printUser(UserEnum.STUDENT);
                                 break;
                             case ADD_ASIGNMENT:
                                 break;
@@ -72,6 +100,7 @@ public class Main {
                             case SUMMARY_TASKS:
                                 break;
                             case RESET:
+                                cntrl = new Controller();
                                 break;
                             case QUIT:
                                 go = false;
@@ -100,9 +129,26 @@ public class Main {
         fillMap();
     }
 
+    private static void printUser(UserEnum key){
+        User[] listUsers = cntrl.getUserList(key);
+        String[] nameString = new String[listUsers.length];
+        if (key.equals(UserEnum.STUDENT)){
+            for (int i = 0; i < listUsers.length; i++) {
+                nameString[i] = listUsers[i].getName() + " (" + ((Student) listUsers[i]).getId() + ")";
+            }
+        }
+        else {
+            for (int i = 0; i < listUsers.length; i++) {
+                nameString[i] = listUsers[i].getName();
+            }
+        }
+        terminal.printlines(nameString);
+
+    }
+
     private static void fillMap(){
         commands.put("instructor", CommandsEnum.ADD_INSTRUCTOR);
-        commands.put("list.instructor", CommandsEnum.LIST_INSTRUCTOR);
+        commands.put("list-instructors", CommandsEnum.LIST_INSTRUCTOR);
         commands.put("tutor", CommandsEnum.ADD_TUTOR);
         commands.put("list-tutors", CommandsEnum.LIST_TUTOR);
         commands.put("student", CommandsEnum.ADD_STUDENT);

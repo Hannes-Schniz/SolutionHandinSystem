@@ -19,7 +19,7 @@ public class Parser {
         int spaces = ZERO;
         String[] returnArray = new String[ONE];
 
-        if (!input.matches("[a-zA-Z0-9_]")){
+        if (!input.matches("[-a-zA-Z0-9_]")){
             throw new IllegalArgumentException("wrong Input");
         }
 

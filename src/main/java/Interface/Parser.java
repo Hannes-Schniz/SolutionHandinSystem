@@ -64,9 +64,7 @@ public class Parser {
             throw new IllegalArgumentException("wrong input");
         }
 
-        int returnInt = Integer.parseInt(input);
-
-        return returnInt;
+        return Integer.parseInt(input);
 
     }
 }

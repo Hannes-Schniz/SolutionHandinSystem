@@ -12,6 +12,8 @@ import java.util.HashMap;
  */
 public class Main {
 
+    private static final int ZERO = 0;
+
     private static Controller cntrl;
 
     private static Terminal terminal;
@@ -33,40 +35,41 @@ public class Main {
                 String input = terminal.readln();
                 if (!input.equals("")){
                     String[] userInput = parser.parseInput(input);
-                    if (!commands.containsKey(userInput[0])){
+                    if (!commands.containsKey(userInput[ZERO])){
                         terminal.println("command does not exist");
                     }
                     else {
                         CommandsEnum command = commands.get(userInput[0]);
                         switch (command){
-                            case ADDINSTRUCTOR:
+                            case ADD_INSTRUCTOR:
                                 Dozent newDozent = new Dozent(userInput[1]);
+                                cntrl.addUser(newDozent);
                                 break;
-                            case LISTINSTRUCTOR:
+                            case LIST_INSTRUCTOR:
                                 break;
-                            case ADDTUTOR:
+                            case ADD_TUTOR:
                                 break;
-                            case LISTTUTOR:
+                            case LIST_TUTOR:
                                 break;
-                            case ADDSTUDENT:
+                            case ADD_STUDENT:
                                 break;
-                            case LISTSTUDENT:
+                            case LIST_STUDENT:
                                 break;
-                            case ADDASIGNMENT:
+                            case ADD_ASIGNMENT:
                                 break;
                             case SUBMIT:
                                 break;
-                            case LISTSOLUTION:
+                            case LIST_SOLUTION:
                                 break;
-                            case ADDREVIEW:
+                            case ADD_REVIEW:
                                 break;
-                            case LISTREVIEW:
+                            case LIST_REVIEW:
                                 break;
-                            case SEARCHPLAGIARISM:
+                            case SEARCH_PLAGIARISM:
                                 break;
-                            case ADDPLAGIARISM:
+                            case ADD_PLAGIARISM:
                                 break;
-                            case SUMMARYTASKS:
+                            case SUMMARY_TASKS:
                                 break;
                             case RESET:
                                 break;
@@ -82,7 +85,10 @@ public class Main {
             }
         }
         catch (IOException e){
-            terminal.println("error");
+            terminal.printError(e.getMessage());
+        }
+        catch (IllegalArgumentException e){
+            terminal.printError(e.getMessage());
         }
     }
 
@@ -95,19 +101,19 @@ public class Main {
     }
 
     private static void fillMap(){
-        commands.put("instructor", CommandsEnum.ADDINSTRUCTOR);
-        commands.put("list.instructor", CommandsEnum.LISTINSTRUCTOR);
-        commands.put("tutor", CommandsEnum.ADDTUTOR);
-        commands.put("list-tutors", CommandsEnum.LISTTUTOR);
-        commands.put("student", CommandsEnum.ADDSTUDENT);
-        commands.put("list-students", CommandsEnum.LISTSTUDENT);
-        commands.put("assignment", CommandsEnum.ADDASIGNMENT);
-        commands.put("list-solutions", CommandsEnum.LISTSOLUTION);
-        commands.put("review", CommandsEnum.ADDREVIEW);
-        commands.put("list-reviews", CommandsEnum.LISTREVIEW);
-        commands.put("search-plagiarism", CommandsEnum.SEARCHPLAGIARISM);
-        commands.put("mark-plagiarism", CommandsEnum.ADDPLAGIARISM);
-        commands.put("summary-tasks", CommandsEnum.SUMMARYTASKS);
+        commands.put("instructor", CommandsEnum.ADD_INSTRUCTOR);
+        commands.put("list.instructor", CommandsEnum.LIST_INSTRUCTOR);
+        commands.put("tutor", CommandsEnum.ADD_TUTOR);
+        commands.put("list-tutors", CommandsEnum.LIST_TUTOR);
+        commands.put("student", CommandsEnum.ADD_STUDENT);
+        commands.put("list-students", CommandsEnum.LIST_STUDENT);
+        commands.put("assignment", CommandsEnum.ADD_ASIGNMENT);
+        commands.put("list-solutions", CommandsEnum.LIST_SOLUTION);
+        commands.put("review", CommandsEnum.ADD_REVIEW);
+        commands.put("list-reviews", CommandsEnum.LIST_REVIEW);
+        commands.put("search-plagiarism", CommandsEnum.SEARCH_PLAGIARISM);
+        commands.put("mark-plagiarism", CommandsEnum.ADD_PLAGIARISM);
+        commands.put("summary-tasks", CommandsEnum.SUMMARY_TASKS);
         commands.put("reset", CommandsEnum.RESET);
         commands.put("quit", CommandsEnum.QUIT);
         commands.put("submit", CommandsEnum.SUBMIT);

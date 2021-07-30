@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Parser {
 
-    private static int ONE = 1;
+    private static final int ONE = 1;
 
-    private static int ZERO = 0;
+    private static final int ZERO = 0;
 
     public Parser() {
 

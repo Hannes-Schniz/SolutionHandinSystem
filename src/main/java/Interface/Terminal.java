@@ -26,5 +26,7 @@ public class Terminal {
         return reader.readLine();
     }
 
-
+    public void printError(String input){
+        System.out.println("Error: " + input);
+    }
 }

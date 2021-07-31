@@ -165,5 +165,36 @@ public class Controller {
         throw new IllegalArgumentException("no such Question");
     }
 
+    public void addReview(int questionId, int studentId, int mark, String comment, String tutor) {
+        Question key = getQuestion(questionId);
+        Text[][] handIns = textList.get(key);
+        int idx = findStudentSolution(studentId, key, handIns);
+        if (idx == -1) {
+            throw new IllegalArgumentException("no such solution");
+        }
+        handIns[idx][ONE] = new Correction(mark, (HandIn) handIns[idx][ZERO], findTutor(tutor), comment);
+        ((HandIn) handIns[idx][ZERO]).setCorrected(true);
+        textList.put(key, handIns);
+    }
+
+    private int findStudentSolution(int studentId, Question key, Text[][] handIns) {
+        for (int i = 0; i < handIns.length; i++) {
+            Student student = (Student) handIns[i][ZERO].getProducer();
+            if (student.getId() == studentId) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private Tutor findTutor(String name) {
+        User[] tutorList = userList.get(UserEnum.TUTOR);
+        for (int i = 0; i < tutorList.length; i++) {
+            if (tutorList[i].getName().equals(name)) {
+                return (Tutor) tutorList[i];
+            }
+        }
+        throw new IllegalArgumentException("tutor doesn't exist");
+    }
 
 }

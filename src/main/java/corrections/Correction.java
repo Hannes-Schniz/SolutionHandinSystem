@@ -29,12 +29,10 @@ public class Correction extends Text {
      * @param mark     the mark
      * @param original the original
      * @param tutor    the tutor
-     * @param version  the version
      */
-    public Correction(int mark, HandIn original, Tutor tutor, int version) {
-        super("", tutor);
+    public Correction(int mark, HandIn original, Tutor tutor,  String comment) {
+        super(comment, tutor);
         this.mark = mark;
-        this.version = version;
         this.inputOriginal(original);
     }
 

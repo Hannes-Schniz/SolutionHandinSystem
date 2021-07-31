@@ -35,7 +35,7 @@ public class Parser {
         int spaces = ZERO;
         String[] returnArray = new String[ONE];
 
-        if (!input.matches("[-a-zA-Z0-9_\\s.!?,]*")) {
+        if (!input.matches("[-a-zA-Z0-9\\s.!?,_üöä]*")) {
             throw new IllegalArgumentException("wrong Input");
         }
 

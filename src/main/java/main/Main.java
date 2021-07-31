@@ -34,6 +34,8 @@ public class Main {
 
     private static final int FOUR = 4;
 
+    private static final int SIX = 6;
+
     private static Controller cntrl;
 
     private static Terminal terminal;
@@ -90,6 +92,7 @@ public class Main {
                                 listSolutions(userInput);
                                 break;
                             case ADD_REVIEW:
+                                addReview(userInput);
                                 break;
                             case LIST_REVIEW:
                                 break;
@@ -172,12 +175,12 @@ public class Main {
     }
 
     private static void addStudent(String[] userInput) {
-        if (userInput.length != TWO) {
+        if (userInput.length != THREE) {
             terminal.printError("wrong input");
             return;
         }
         parser.checkName(userInput[ONE]);
-        if (!userInput[TWO].matches("[0-9]{6}")) {
+        if (!userInput[TWO].matches("[0-9]{5}")) {
             terminal.println("id wrong length");
             return;
         }
@@ -231,6 +234,19 @@ public class Main {
             String text = handIns[i].getText();
             terminal.println(name + id + text);
         }
+    }
+
+    private static void addReview(String[] userInput) {
+        if (userInput.length != SIX) {
+            terminal.printError("wrong input");
+            return;
+        }
+        String tutor = userInput[ONE];
+        int questionId = parser.parseNumber(userInput[TWO]);
+        int studentId = parser.parseNumber(userInput[THREE]);
+        int mark = parser.parseNumber(userInput[FOUR]);
+        String comment = userInput[userInput.length - 1];
+        cntrl.addReview(questionId, studentId, mark, comment, tutor);
     }
 
     private static void fillMap() {

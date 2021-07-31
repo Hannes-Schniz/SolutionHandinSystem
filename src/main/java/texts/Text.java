@@ -19,8 +19,9 @@ public class Text {
      *
      * @param text the text
      */
-    public Text(String text) {
+    public Text(String text, User producer) {
         this.text = text;
+        this.producer =  producer;
     }
 
     /**

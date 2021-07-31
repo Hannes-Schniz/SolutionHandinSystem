@@ -7,8 +7,10 @@ import texts.Question;
 import texts.Text;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
+import java.security.KeyException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The type Controller.
@@ -22,17 +24,19 @@ public class Controller {
 
     private static final int ONE = 1;
 
+    private static final int TWO = 2;
+
     private HashMap<UserEnum, User[]> userList;
 
-    private HashMap<Question, List<Text[]>> questions;
+    private HashMap<Question, Text[][]> textList;
 
     /**
      * Instantiates a new Controller.
      *
      */
     public Controller() {
-        this.userList = new HashMap<UserEnum, User[]>();
-        this.questions = new HashMap<Question, List<Text[]>>();
+        this.userList = new HashMap<>();
+        this.textList = new HashMap<>();
     }
 
     /**
@@ -48,15 +52,6 @@ public class Controller {
 
     public boolean hasUser(UserEnum key) {
         return userList.containsKey(key);
-    }
-
-    /**
-     * Gets text list.
-     *
-     * @return the text list
-     */
-    public HashMap<Question, List<Text[]>> getTextList() {
-        return questions;
     }
 
     /**
@@ -83,14 +78,14 @@ public class Controller {
         }
         else {
             User[] newerUser = extendUser(userList.get(key));
-            newerUser[newerUser.length - 1] = newUser;
+            newerUser[newerUser.length - ONE] = newUser;
             userList.put(key, newerUser);
         }
     }
 
     private User[] extendUser(User[] input) {
-        User[] oldUser = new User[input.length + 1];
-        System.arraycopy(input, 0, oldUser, 0, input.length);
+        User[] oldUser = new User[input.length + ONE];
+        System.arraycopy(input, ZERO, oldUser, ZERO, input.length);
         return oldUser;
     }
 
@@ -99,12 +94,11 @@ public class Controller {
      *
      * @param question the question
      */
-    public void addQuestion(Question question) {
-        if (!questions.containsKey(question)) {
-            questions.put(question, null);
-            return;
+    public void addQuestion(Question question) throws KeyAlreadyExistsException {
+        if (textList.containsKey(question)) {
+            throw new KeyAlreadyExistsException("Question already exists");
         }
-        throw new KeyAlreadyExistsException("Question already exists");
+        textList.put(question, new Text[ZERO][TWO]);
     }
 
     /**
@@ -112,54 +106,65 @@ public class Controller {
      *
      * @param handIn the handIn
      */
-    public void handIn(HandIn handIn) {
-        if (questions.containsKey(handIn.getOriginal())) { //if the question exists proceed
-
-            List<Text[]> working = questions.get(handIn.getOriginal());
-            int check = checkForHandIn(working , handIn);
-
-            if (check == -1) { //if there isnt a handIn from the student it adds a new entry
-                working.add(genInput(handIn, null));
+    public void handIn(HandIn handIn) throws KeyException, IllegalAccessException {
+        if (!textList.containsKey(handIn.getOriginal())) {
+            throw new KeyException("Question does not exist");
+        }
+        int handinpos = containsHandIn(handIn);
+        Text[][] oldText = textList.get(handIn.getOriginal());
+        if (handinpos == -1) {
+            int oldHandIns = oldText.length;
+            Text[][] newText = new Text[oldHandIns + ONE][TWO];
+            System.arraycopy(oldText, ZERO, newText, ZERO, oldText.length);
+            newText[newText.length - 1][ZERO] = handIn;
+            textList.put(handIn.getOriginal(), newText);
+        }
+        else {
+            HandIn searched = (HandIn) oldText[handinpos][ZERO];
+            if (searched.isCorrected()) {
+                throw new IllegalAccessException("Is already corrected");
             }
-            else //if there is a handIn it changes it
-            {
-                working.set(check, genInput(handIn, (Correction) working.get(check)[ONE]));
-            }
-            questions.put(handIn.getOriginal(), working);
+            oldText[handinpos][ZERO] = handIn;
+            textList.put(handIn.getOriginal(), oldText);
         }
 
     }
 
-    /**
-     * generates a tuple of a handIn and null for the correction.
-     *
-     * @param handIn new handIn
-     * @param correction existing correction
-     * @return generated input array
-     */
-    private Text[] genInput(HandIn handIn, Correction correction) {
-        Text[] input = new Text[2];
-        input[0] = handIn;
-        input[1] = correction;
-        return input;
-    }
-
-    /**
-     * finds the position of the existing hand in of the user if there is none returns -1
-     *
-     * @param allHandIns all existing handIns
-     * @param handIn new handIn
-     * @return position of the previous hand in
-     */
-    private int checkForHandIn(List<Text[]> allHandIns, HandIn handIn) {
-
-        for (int i = 0; i < allHandIns.size(); i++) {
-            if (allHandIns.get(i)[ZERO].getProducer().equals(handIn.getProducer())) {
+    private int containsHandIn(HandIn input) {
+        Text[][] old = textList.get(input.getOriginal());
+        for (int i = 0; i < old.length; i++) {
+            if (old[i][0].equals(input)) {
                 return i;
             }
         }
         return -1;
-
     }
+
+    public Question getQuestion(int id) {
+        Set<Question> questionArray = textList.keySet();
+        for (Question question : questionArray) {
+            if (question.getId() == id) {
+                return question;
+            }
+        }
+        throw new IllegalArgumentException("Question id does not exist");
+    }
+
+    public int getIndex() {
+        return textList.size() + 1;
+    }
+
+    public HandIn[] getSolutions(int questionId) {
+        if (textList.containsKey(getQuestion(questionId))) {
+            Text[][] working = textList.get(getQuestion(questionId));
+            HandIn[] ret = new HandIn[working.length];
+            for (int i = 0; i < working.length; i++) {
+                ret[i] = (HandIn) working[i][ZERO];
+            }
+            return ret;
+        }
+        throw new IllegalArgumentException("no such Question");
+    }
+
 
 }

@@ -1,6 +1,8 @@
 package userinputs;
 
 
+import java.util.InputMismatchException;
+
 /**
  * The type Parser.
  *
@@ -77,11 +79,18 @@ public class Parser {
      */
     public int parseNumber(String input) throws IllegalArgumentException {
 
-        if (!input.matches("[0-9]*")) {
+        if (!input.matches("[0-9]+[0-9]*")) {
             throw new IllegalArgumentException("wrong input");
         }
 
         return Integer.parseInt(input);
 
+    }
+
+    public void checkName(String input) {
+        if (input.matches("[A-Z]+[a-z]*")) {
+            return;
+        }
+        throw new InputMismatchException("Name has to start with upper case letter");
     }
 }

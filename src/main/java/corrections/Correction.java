@@ -1,7 +1,10 @@
 package corrections;
 
+import human.Student;
 import human.Tutor;
+import human.User;
 import texts.HandIn;
+import texts.Question;
 import texts.Text;
 
 /**
@@ -18,8 +21,6 @@ public class Correction extends Text {
 
     private HandIn original;
 
-    private Tutor tutor;
-
     private int version;
 
     /**
@@ -31,9 +32,8 @@ public class Correction extends Text {
      * @param version  the version
      */
     public Correction(int mark, HandIn original, Tutor tutor, int version) {
-        super("");
+        super("", tutor);
         this.mark = mark;
-        this.tutor = tutor;
         this.version = version;
         this.inputOriginal(original);
     }
@@ -70,23 +70,6 @@ public class Correction extends Text {
         return question_id;
     }
 
-    /**
-     * Gets original.
-     *
-     * @return the original
-     */
-    public HandIn getOriginal() {
-        return original;
-    }
-
-    /**
-     * Gets tutor.
-     *
-     * @return the tutor
-     */
-    public Tutor getProducer() {
-        return tutor;
-    }
 
     /**
      * Gets version.
@@ -95,5 +78,9 @@ public class Correction extends Text {
      */
     public int getVersion() {
         return version;
+    }
+
+    public HandIn getOriginal() {
+        return original;
     }
 }

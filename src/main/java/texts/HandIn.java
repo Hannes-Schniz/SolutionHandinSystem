@@ -13,9 +13,7 @@ public class HandIn extends Text {
 
     private boolean corrected;
 
-    private final Question original;
-
-    private final Student student;
+    private final Question originalQuestion;
 
     /**
      * Instantiates a new Hand in.
@@ -25,10 +23,9 @@ public class HandIn extends Text {
      * @param student  the student
      */
     public HandIn(String text, Question original, Student student) {
-        super(text);
+        super(text, student);
         this.corrected = false;
-        this.original = original;
-        this.student = student;
+        this.originalQuestion = original;
     }
 
     /**
@@ -55,15 +52,7 @@ public class HandIn extends Text {
      * @return the original
      */
     public Question getOriginal() {
-        return original;
+        return originalQuestion;
     }
 
-    /**
-     * Returns Producer
-     *
-     * @return the original
-     */
-    public User getProducer() {
-        return student;
-    }
 }

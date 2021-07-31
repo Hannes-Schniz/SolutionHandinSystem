@@ -5,11 +5,16 @@ import human.Dozent;
 import human.Student;
 import human.Tutor;
 import human.User;
+import texts.HandIn;
+import texts.Question;
 import userinputs.Parser;
 import userinputs.Terminal;
 import java.io.IOException;
+import java.security.KeyException;
 import java.util.HashMap;
 import controller.UserEnum;
+
+import javax.management.openmbean.KeyAlreadyExistsException;
 
 /**
  * The type Main.
@@ -24,6 +29,10 @@ public class Main {
     private static final int ZERO = 0;
 
     private static final int TWO = 2;
+
+    private static final int THREE = 3;
+
+    private static final int FOUR = 4;
 
     private static Controller cntrl;
 
@@ -40,25 +49,26 @@ public class Main {
      */
     public static void main(String[] args) {
         setup();
-        try {
-            boolean go = true;
-            while (go) {
+        boolean go = true;
+        while (go) {
+            try {
                 String input = terminal.readln();
                 if (!input.equals("")) {
                     String[] userInput = parser.parseInput(input);
                     if (!commands.containsKey(userInput[ZERO])) {
                         terminal.println("command does not exist");
-                    }
-                    else {
+                    } else {
                         CommandsEnum command = commands.get(userInput[ZERO]);
                         switch (command) {
                             case ADD_INSTRUCTOR:
+                                parser.checkName(userInput[ONE]);
                                 cntrl.addUser(new Dozent(userInput[ONE]));
                                 break;
                             case LIST_INSTRUCTOR:
                                 listInstructors();
                                 break;
                             case ADD_TUTOR:
+                                parser.checkName(userInput[ONE]);
                                 cntrl.addUser(new Tutor(userInput[ONE]));
                                 break;
                             case LIST_TUTOR:
@@ -71,10 +81,13 @@ public class Main {
                                 listStudents();
                                 break;
                             case ADD_ASIGNMENT:
+                                addAssignment(userInput);
                                 break;
                             case SUBMIT:
+                                handIn(userInput);
                                 break;
                             case LIST_SOLUTION:
+                                listSolutions(userInput);
                                 break;
                             case ADD_REVIEW:
                                 break;
@@ -99,9 +112,9 @@ public class Main {
                     }
                 }
             }
-        }
-        catch (IOException | IllegalArgumentException e) {
-            terminal.printError(e.getMessage());
+            catch (IOException | IllegalArgumentException e) {
+                terminal.println(e.getMessage());
+            }
         }
     }
 
@@ -111,6 +124,22 @@ public class Main {
         parser = new Parser();
         commands = new HashMap<String, CommandsEnum>();
         fillMap();
+    }
+
+    private static void addAssignment(String[] userinput) {
+        if (userinput.length != TWO) {
+            terminal.printError("wrong input");
+            return;
+        }
+        try {
+            int idx = cntrl.getIndex();
+            Question newQuestion = new Question(userinput[1], idx);
+            cntrl.addQuestion(newQuestion);
+            terminal.println("assignment (" + idx + ")");
+        }
+        catch (KeyAlreadyExistsException e) {
+            terminal.printError(e.getMessage());
+        }
     }
 
     private static void printUser(UserEnum key) {
@@ -143,6 +172,11 @@ public class Main {
     }
 
     private static void addStudent(String[] userInput) {
+        if (userInput.length != TWO) {
+            terminal.printError("wrong input");
+            return;
+        }
+        parser.checkName(userInput[ONE]);
         if (!userInput[TWO].matches("[0-9]{6}")) {
             terminal.println("id wrong length");
             return;
@@ -153,6 +187,49 @@ public class Main {
     private static void listStudents() {
         if (cntrl.hasUser(UserEnum.STUDENT)) {
             printUser(UserEnum.STUDENT);
+        }
+    }
+
+    private static void handIn(String[] userInput) {
+        if (userInput.length != FOUR) {
+            terminal.printError("wrong input");
+            return;
+        }
+        try {
+            int id = parser.parseNumber(userInput[ONE]);
+            int studentId = parser.parseNumber(userInput[TWO]);
+            Question question = cntrl.getQuestion(id);
+            HandIn newHandIn = new HandIn(userInput[THREE], question, getStudent(studentId));
+            cntrl.handIn(newHandIn);
+        }
+        catch (ClassNotFoundException | IllegalArgumentException | IllegalAccessException | KeyException e) {
+            terminal.printError(e.getMessage());
+        }
+    }
+
+    private static Student getStudent(int studentId) throws ClassNotFoundException {
+        User[] studentList = cntrl.getUserList(UserEnum.STUDENT);
+        for (int i = 0; i < studentList.length; i++) {
+            Student current = (Student) studentList[i];
+            if (current.getId() == studentId) {
+                return (Student) studentList[i];
+            }
+        }
+        throw new ClassNotFoundException("No such Student found");
+    }
+
+    private static void listSolutions(String[] userInput) {
+        if (userInput.length != TWO) {
+            terminal.printError("wrong input");
+            return;
+        }
+        HandIn[] handIns = cntrl.getSolutions(parser.parseNumber(userInput[ONE]));
+        for (int i = 0; i < handIns.length; i++) {
+            Student student = (Student) handIns[i].getProducer();
+            String name = student.getName() + " ";
+            String id = '(' + String.valueOf(student.getId() + "): ");
+            String text = handIns[i].getText();
+            terminal.println(name + id + text);
         }
     }
 

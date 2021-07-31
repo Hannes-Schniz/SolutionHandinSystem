@@ -1,5 +1,7 @@
 package texts;
 
+import human.Dozent;
+
 /**
  * The type Question.
  *
@@ -17,7 +19,7 @@ public class Question extends Text {
      * @param id   the id
      */
     public Question(String text, int id) {
-        super(text);
+        super(text, null);
         this.id = id;
     }
 

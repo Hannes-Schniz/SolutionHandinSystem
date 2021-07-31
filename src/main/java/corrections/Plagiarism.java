@@ -36,8 +36,7 @@ public class Plagiarism extends Correction {
      * @param finder     the finder
      */
     public Plagiarism(Correction correction, Dozent finder) {
-        super(MARK_FIVE, correction.getOriginal(), correction.getProducer(), correction.getVersion());
+        super(MARK_FIVE, correction.getOriginal(), (Tutor) correction.getProducer(), correction.getVersion());
         this.finder = finder;
     }
-
 }

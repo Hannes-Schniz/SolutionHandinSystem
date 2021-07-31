@@ -1,15 +1,14 @@
-package controller;
+package main.java.controller;
 
-import corrections.Correction;
-import human.*;
-import texts.HandIn;
-import texts.Question;
-import texts.Text;
+import main.java.corrections.Correction;
+import main.java.human.*;
+import main.java.texts.HandIn;
+import main.java.texts.Question;
+import main.java.texts.Text;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 import java.security.KeyException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 /**

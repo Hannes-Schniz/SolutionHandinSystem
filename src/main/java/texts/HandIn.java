@@ -1,7 +1,7 @@
-package texts;
+package main.java.texts;
 
-import human.Student;
-import human.User;
+import main.java.human.Student;
+import main.java.human.User;
 
 /**
  * The type Hand in.

@@ -1,4 +1,4 @@
-package human;
+package main.java.human;
 
 /**
  * The type Dozent.

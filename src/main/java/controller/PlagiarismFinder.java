@@ -1,9 +1,9 @@
-package controller;
+package main.java.controller;
 
-import corrections.Datacollection;
-import human.Dozent;
-import texts.HandIn;
-import texts.Question;
+import main.java.corrections.Datacollection;
+import main.java.human.Dozent;
+import main.java.texts.HandIn;
+import main.java.texts.Question;
 
 /**
  * The type Plagiarism finder.

@@ -1,4 +1,4 @@
-package corrections;
+package main.java.corrections;
 
 /**
  * The type Datacollection.

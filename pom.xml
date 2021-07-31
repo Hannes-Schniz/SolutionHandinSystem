@@ -23,7 +23,7 @@
                             <classpathPrefix>lib/</classpathPrefix>
                             <classpathLayoutType>repository</classpathLayoutType>
                             <useUniqueVersions>false</useUniqueVersions>
-                            <mainClass>main.main</mainClass>
+                            <mainClass>main.java.main.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

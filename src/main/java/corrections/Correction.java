@@ -1,11 +1,11 @@
-package corrections;
+package main.java.corrections;
 
-import human.Student;
-import human.Tutor;
-import human.User;
-import texts.HandIn;
-import texts.Question;
-import texts.Text;
+import main.java.human.Student;
+import main.java.human.Tutor;
+import main.java.human.User;
+import main.java.texts.HandIn;
+import main.java.texts.Question;
+import main.java.texts.Text;
 
 /**
  * The type Correction.

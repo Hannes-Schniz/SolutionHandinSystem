@@ -1,6 +1,4 @@
-package texts;
-
-import human.Dozent;
+package main.java.texts;
 
 /**
  * The type Question.

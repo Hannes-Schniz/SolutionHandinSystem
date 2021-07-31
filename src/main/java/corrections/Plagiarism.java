@@ -1,8 +1,8 @@
-package corrections;
+package main.java.corrections;
 
-import human.Dozent;
-import human.Tutor;
-import texts.HandIn;
+import main.java.human.Dozent;
+import main.java.human.Tutor;
+import main.java.texts.HandIn;
 
 /**
  * The type Plagiarism.

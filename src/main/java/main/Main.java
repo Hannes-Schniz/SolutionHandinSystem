@@ -1,18 +1,18 @@
-package main;
+package main.java.main;
 
-import controller.Controller;
-import human.Dozent;
-import human.Student;
-import human.Tutor;
-import human.User;
-import texts.HandIn;
-import texts.Question;
-import userinputs.Parser;
-import userinputs.Terminal;
+import main.java.controller.Controller;
+import main.java.human.Dozent;
+import main.java.human.Student;
+import main.java.human.Tutor;
+import main.java.human.User;
+import main.java.texts.HandIn;
+import main.java.texts.Question;
+import main.java.userinputs.Parser;
+import main.java.userinputs.Terminal;
 import java.io.IOException;
 import java.security.KeyException;
 import java.util.HashMap;
-import controller.UserEnum;
+import main.java.controller.UserEnum;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 

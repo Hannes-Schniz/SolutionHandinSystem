@@ -1,6 +1,6 @@
-package texts;
+package main.java.texts;
 
-import human.User;
+import main.java.human.User;
 
 /**
  * The type Text.

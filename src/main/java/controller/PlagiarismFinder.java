@@ -2,6 +2,7 @@ package main.java.controller;
 
 import main.java.corrections.Datacollection;
 import main.java.human.Dozent;
+import main.java.human.Student;
 import main.java.texts.HandIn;
 import main.java.texts.Question;
 
@@ -17,8 +18,6 @@ public class PlagiarismFinder {
 
     private static final int ONE_HUNDRET = 100;
 
-    private final Dozent searcher;
-
     private final Question originalQuestion;
 
     private final Datacollection plagiarismCollection;
@@ -26,11 +25,9 @@ public class PlagiarismFinder {
     /**
      * Instantiates a new Plagiarism finder.
      *
-     * @param searcher the searcher
      * @param originalQuestion the original
      */
-    public PlagiarismFinder(Dozent searcher, Question originalQuestion) {
-        this.searcher = searcher;
+    public PlagiarismFinder(Question originalQuestion) {
         this.originalQuestion = originalQuestion;
         this.plagiarismCollection = new Datacollection();
     }
@@ -48,39 +45,41 @@ public class PlagiarismFinder {
 
         String newHandIn = handIn.getText();
 
-        for (int i = 0; i < originalHandIn.length(); i++) {
-            if (i > newHandIn.length()) {
-                break;
-            }
-            if ((originalHandIn.charAt(i) == newHandIn.charAt(i))) {
-                find += originalHandIn.charAt(i);
-            }
-            else {
-                if (plagiarismCollection.getLength() < find.length()) {
-                    plagiarismCollection.setBiggestString(find);
-                    plagiarismCollection.setLength(find.length());
-                    plagiarismCollection.setPercent(calculatePercent(handIn, find));
+        for (int i = 0; i < newHandIn.length(); i++) {
+            int count = 0;
+            String aproxLongest ="";
+            for (int j = 0; j < originalHandIn.length(); j++) {
+                Character current = newHandIn.charAt(i + count);
+                if (current.equals(originalHandIn.charAt(j))) {
+                    aproxLongest = aproxLongest + current;
+                    count++;
+                    if (aproxLongest.length() > plagiarismCollection.getLength()) {
+                        plagiarismCollection.setBiggestString(aproxLongest);
+                        plagiarismCollection.setLength(aproxLongest.length());
+                    }
+                }
+                else {
+                    aproxLongest ="";
+                    count = 0;
+                }
+                if (i + count > newHandIn.length() - 1) {
+                    break;
                 }
             }
         }
+        plagiarismCollection.setPercent(calculatePercent(handIn, plagiarismCollection.getBiggestString()));
+        plagiarismCollection.setStudentOne((Student) handIn.getProducer());
+        plagiarismCollection.setStudentTwo((Student) original.getProducer());
 
         return plagiarismCollection;
     }
 
     private double calculatePercent(HandIn handIn, String find) {
 
-        double calculated = (double) handIn.getText().length() / (double) find.length() * ONE_HUNDRET;
+        double calculated =(double) find.length() / (double) handIn.getText().length() * ONE_HUNDRET;
 
-        return (double) java.lang.Math.round(calculated * ONE_HUNDRET) / ONE_HUNDRET;
-    }
-
-    /**
-     * Gets searcher.
-     *
-     * @return the searcher
-     */
-    public Dozent getSearcher() {
-        return searcher;
+        double preReturn =  java.lang.Math.round(calculated * ONE_HUNDRET);
+        return preReturn / ONE_HUNDRET;
     }
 
     /**

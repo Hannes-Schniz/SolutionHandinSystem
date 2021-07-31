@@ -1,5 +1,7 @@
 package main.java.corrections;
 
+import main.java.human.Student;
+
 /**
  * The type Datacollection.
  *
@@ -17,6 +19,10 @@ public class Datacollection {
     private int length;
 
     private double percent;
+
+    private Student studentOne;
+
+    private Student studentTwo;
 
     /**
      * Instantiates a new Datacollection.
@@ -127,4 +133,19 @@ public class Datacollection {
         return this.length != MINUS_ONE;
     }
 
+    public Student getStudentOne() {
+        return studentOne;
+    }
+
+    public void setStudentOne(Student studentOne) {
+        this.studentOne = studentOne;
+    }
+
+    public Student getStudentTwo() {
+        return studentTwo;
+    }
+
+    public void setStudentTwo(Student studentTwo) {
+        this.studentTwo = studentTwo;
+    }
 }

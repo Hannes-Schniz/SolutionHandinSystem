@@ -1,6 +1,7 @@
 package main.java.controller;
 
 import main.java.corrections.Correction;
+import main.java.corrections.Datacollection;
 import main.java.human.*;
 import main.java.texts.HandIn;
 import main.java.texts.Question;
@@ -8,6 +9,7 @@ import main.java.texts.Text;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 import java.security.KeyException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +31,8 @@ public class Controller {
     private HashMap<UserEnum, User[]> userList;
 
     private HashMap<Question, Text[][]> textList;
+
+    private PlagiarismFinder finder;
 
     /**
      * Instantiates a new Controller.
@@ -201,7 +205,7 @@ public class Controller {
     public List<Correction> getCorrections(int keyId) {
         Question key = getQuestion(keyId);
         Text[][] texts = textList.get(key);
-        List<Correction> retCollection = null;
+        ArrayList<Correction> retCollection = new ArrayList<Correction>();
 
         for (int i = 0; i < texts.length; i++) {
             if (((HandIn) texts[i][ZERO]).isCorrected()) {
@@ -209,6 +213,35 @@ public class Controller {
             }
         }
         return  retCollection;
+    }
+
+    public List<Datacollection> search(int questionID) {
+        Question key = getQuestion(questionID);
+        Text[][] texFiles = textList.get(key);
+        if (!isFinished(key)) {
+            throw new IllegalArgumentException("not all submissions are corrected yet!");
+        }
+        ArrayList<Datacollection> dataList = new ArrayList<Datacollection>();
+        for (int i = 0; i < texFiles.length; i++) {
+            for (int j = 0; j < texFiles.length; j++) {
+                if (i != j) {
+                    finder = new PlagiarismFinder(key);
+                    Datacollection data = finder.findPlagiarism((HandIn) texFiles[i][ZERO], (HandIn) texFiles[j][ZERO]);
+                    dataList.add(data);
+                }
+            }
+        }
+        return dataList;
+    }
+
+    private boolean isFinished(Question key) {
+        Text[][] textFiles = textList.get(key);
+        for (int i = 0; i < textFiles.length; i++) {
+            if (!((HandIn) textFiles[i][ZERO]).isCorrected()) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

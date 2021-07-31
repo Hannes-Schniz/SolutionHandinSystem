@@ -2,6 +2,7 @@ package main.java.main;
 
 import main.java.controller.Controller;
 import main.java.corrections.Correction;
+import main.java.corrections.Datacollection;
 import main.java.human.Dozent;
 import main.java.human.Student;
 import main.java.human.Tutor;
@@ -38,6 +39,8 @@ public class Main {
     private static final int FOUR = 4;
 
     private static final int SIX = 6;
+
+    private static final int FIVE = 5;
 
     private static Controller cntrl;
 
@@ -98,8 +101,10 @@ public class Main {
                                 addReview(userInput);
                                 break;
                             case LIST_REVIEW:
+                                listReview(userInput);
                                 break;
                             case SEARCH_PLAGIARISM:
+                                searchPlagiarism(userInput);
                                 break;
                             case ADD_PLAGIARISM:
                                 break;
@@ -261,9 +266,9 @@ public class Main {
             List<Correction> corrections = cntrl.getCorrections(parser.parseNumber(userInput[ONE]));
             for (int i = 0; i < corrections.size(); i++) {
                 Correction current = corrections.get(i);
-                String tutor = current.getProducer() + ": ";
+                String tutor = current.getProducer().getName() + ": ";
                 String review = current.getText() + " ";
-                String numbers = "[" + current.getOriginal().getProducer() + " " + current.getMark() + "]";
+                String numbers = "[" + ((Student)current.getOriginal().getProducer()).getId() + " " + current.getMark() + "]";
                 terminal.println(tutor + review + numbers);
             }
         }
@@ -271,6 +276,34 @@ public class Main {
             terminal.printError(e.getMessage());
         }
 
+    }
+
+    private static void searchPlagiarism(String[] userInput) {
+        if (userInput.length != TWO) {
+            terminal.printError("wrong input");
+            return;
+        }
+        try {
+            List<Datacollection> plagiarisms = cntrl.search(parser.parseNumber(userInput[ONE]));
+            for (int i = 0; i < plagiarisms.size(); i++) {
+                Datacollection current = plagiarisms.get(i);
+                if (current.getPercent() > 0) {
+                    String studentOne = current.getStudentOne().getId() + " ";
+                    String studentTwo = current.getStudentTwo().getId() + " ";
+                    String longestString = current.getBiggestString() + " ";
+                    String count = current.getLength() + " ";
+                    String percent = String.valueOf(current.getPercent());
+                    if (percent.length() < FIVE) {
+                        percent = percent + "0";
+                    }
+                    percent = percent + " ";
+                    terminal.println(studentOne + studentTwo + longestString + count + percent);
+                }
+            }
+        }
+        catch (IllegalArgumentException e) {
+            terminal.printError(e.getMessage());
+        }
     }
 
     private static void fillMap() {

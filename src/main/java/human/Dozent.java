@@ -1,9 +1,9 @@
-package Human;
+package human;
 
 /**
  * The type Dozent.
  */
-public class Dozent extends User{
+public class Dozent extends User {
 
     /**
      * Instantiates a new Dozent.

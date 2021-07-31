@@ -1,7 +1,10 @@
-package Human;
+package human;
 
 /**
  * The type User.
+ *
+ * @author Hannes Schniz
+ * @version 1.0
  */
 public abstract class User {
 
@@ -12,7 +15,7 @@ public abstract class User {
      *
      * @param name the name
      */
-    public User(String name){
+    public User(String name) {
         this.name = name;
     }
 
@@ -21,7 +24,7 @@ public abstract class User {
      *
      * @return the string
      */
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
@@ -30,7 +33,7 @@ public abstract class User {
      *
      * @param name the name
      */
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 

@@ -1,9 +1,12 @@
-package Human;
+package human;
 
 /**
  * The type Tutor.
+ *
+ * @author Hannes Schniz
+ * @version 1.0
  */
-public class Tutor extends User{
+public class Tutor extends User {
     /**
      * Instantiates a new Tutor.
      *

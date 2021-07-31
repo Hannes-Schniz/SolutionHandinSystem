@@ -1,11 +1,14 @@
-package Corrections;
+package corrections;
 
-import Human.Tutor;
-import Texts.HandIn;
-import Texts.Text;
+import human.Tutor;
+import texts.HandIn;
+import texts.Text;
 
 /**
  * The type Correction.
+ *
+ * @author Hannes Schniz
+ * @version 1.0
  */
 public class Correction extends Text {
 
@@ -35,7 +38,7 @@ public class Correction extends Text {
         this.inputOriginal(original);
     }
 
-    private void inputOriginal(HandIn original){
+    private void inputOriginal(HandIn original) {
         this.original = original;
         this.question_id = original.getOriginal().getId();
     }

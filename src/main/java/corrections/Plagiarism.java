@@ -1,13 +1,16 @@
-package Corrections;
+package corrections;
 
-import Human.Dozent;
-import Human.Tutor;
-import Texts.HandIn;
+import human.Dozent;
+import human.Tutor;
+import texts.HandIn;
 
 /**
  * The type Plagiarism.
+ *
+ * @author Hannes Schniz
+ * @version 1.0
  */
-public class Plagiarism extends Correction{
+public class Plagiarism extends Correction {
 
     private static final int MARK_FIVE = 5;
 
@@ -32,7 +35,7 @@ public class Plagiarism extends Correction{
      * @param correction the correction
      * @param finder     the finder
      */
-    public Plagiarism(Correction correction, Dozent finder){
+    public Plagiarism(Correction correction, Dozent finder) {
         super(MARK_FIVE, correction.getOriginal(), correction.getProducer(), correction.getVersion());
         this.finder = finder;
     }

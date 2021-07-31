@@ -1,10 +1,10 @@
-package Controller;
+package controller;
 
-import Corrections.Correction;
-import Human.*;
-import Texts.HandIn;
-import Texts.Question;
-import Texts.Text;
+import corrections.Correction;
+import human.*;
+import texts.HandIn;
+import texts.Question;
+import texts.Text;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 import java.util.HashMap;
@@ -18,15 +18,9 @@ import java.util.List;
  */
 public class Controller {
 
-    private static final String USER_DOZENT = "Dozent";
+    private static final int ZERO = 0;
 
-    private static final String USER_TUTOR = "Tutor";
-
-    private static final String USER_STUDENT = "Student";
-
-    private static int ZERO = 0;
-
-    private static int ONE = 1;
+    private static final int ONE = 1;
 
     private HashMap<UserEnum, User[]> userList;
 
@@ -95,12 +89,9 @@ public class Controller {
     }
 
     private User[] extendUser(User[] input) {
-        User[] oldUser = input;
-        input = new User[input.length + 1];
-        for (int i = 0; i < oldUser.length; i++) {
-            input[i] = oldUser[i];
-        }
-        return input;
+        User[] oldUser = new User[input.length + 1];
+        System.arraycopy(input, 0, oldUser, 0, input.length);
+        return oldUser;
     }
 
     /**
@@ -127,7 +118,7 @@ public class Controller {
             List<Text[]> working = questions.get(handIn.getOriginal());
             int check = checkForHandIn(working , handIn);
 
-            if (check == -1){ //if there isnt a handIn from the student it adds a new entry
+            if (check == -1) { //if there isnt a handIn from the student it adds a new entry
                 working.add(genInput(handIn, null));
             }
             else //if there is a handIn it changes it

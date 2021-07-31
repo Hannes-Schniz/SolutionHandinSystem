@@ -1,9 +1,9 @@
-package Human;
+package human;
 
 /**
  * The type Student.
  */
-public class Student extends User{
+public class Student extends User {
 
     private int id;
 
@@ -13,7 +13,7 @@ public class Student extends User{
      * @param name the name
      * @param id   the id
      */
-    public Student(String name, int id){
+    public Student(String name, int id) {
         super(name);
         this.id = id;
     }

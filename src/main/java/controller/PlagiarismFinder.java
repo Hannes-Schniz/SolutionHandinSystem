@@ -1,24 +1,27 @@
-package Controller;
+package controller;
 
-import Corrections.Datacollection;
-import Human.Dozent;
-import Texts.HandIn;
-import Texts.Question;
+import corrections.Datacollection;
+import human.Dozent;
+import texts.HandIn;
+import texts.Question;
 
 /**
  * The type Plagiarism finder.
+ *
+ * @author Hannes Schniz
+ * @version 1.0
  */
 public class PlagiarismFinder {
 
-    private static String EMPTY_STRING = "";
+    private static final String EMPTY_STRING = "";
 
-    private static int ONE_HUNDRET = 100;
+    private static final int ONE_HUNDRET = 100;
 
-    private Dozent searcher;
+    private final Dozent searcher;
 
-    private Question originalQuestion;
+    private final Question originalQuestion;
 
-    private Datacollection plagiarismCollection;
+    private final Datacollection plagiarismCollection;
 
     /**
      * Instantiates a new Plagiarism finder.
@@ -37,7 +40,7 @@ public class PlagiarismFinder {
      *
      * @return the Datacollection
      */
-    public Datacollection findPlagiarism(HandIn handIn, HandIn original){
+    public Datacollection findPlagiarism(HandIn handIn, HandIn original) {
 
         String find = EMPTY_STRING;
 
@@ -46,14 +49,14 @@ public class PlagiarismFinder {
         String newHandIn = handIn.getText();
 
         for (int i = 0; i < originalHandIn.length(); i++) {
-            if (i > newHandIn.length()){
+            if (i > newHandIn.length()) {
                 break;
             }
-            if ((originalHandIn.charAt(i) == newHandIn.charAt(i))){
+            if ((originalHandIn.charAt(i) == newHandIn.charAt(i))) {
                 find += originalHandIn.charAt(i);
             }
             else {
-                if (plagiarismCollection.getLength() < find.length()){
+                if (plagiarismCollection.getLength() < find.length()) {
                     plagiarismCollection.setBiggestString(find);
                     plagiarismCollection.setLength(find.length());
                     plagiarismCollection.setPercent(calculatePercent(handIn, find));
@@ -64,10 +67,28 @@ public class PlagiarismFinder {
         return plagiarismCollection;
     }
 
-    private double calculatePercent(HandIn handIn, String find){
+    private double calculatePercent(HandIn handIn, String find) {
 
         double calculated = (double) handIn.getText().length() / (double) find.length() * ONE_HUNDRET;
 
         return (double) java.lang.Math.round(calculated * ONE_HUNDRET) / ONE_HUNDRET;
+    }
+
+    /**
+     * Gets searcher.
+     *
+     * @return the searcher
+     */
+    public Dozent getSearcher() {
+        return searcher;
+    }
+
+    /**
+     * Gets original question.
+     *
+     * @return the original question
+     */
+    public Question getOriginalQuestion() {
+        return originalQuestion;
     }
 }

@@ -1,18 +1,21 @@
-package Main;
+package main;
 
-import Controller.Controller;
-import Human.Dozent;
-import Human.Student;
-import Human.Tutor;
-import Human.User;
-import Interface.Parser;
-import Interface.Terminal;
+import controller.Controller;
+import human.Dozent;
+import human.Student;
+import human.Tutor;
+import human.User;
+import userinputs.Parser;
+import userinputs.Terminal;
 import java.io.IOException;
 import java.util.HashMap;
-import Controller.UserEnum;
+import controller.UserEnum;
 
 /**
  * The type Main.
+ *
+ * @author Hannes Schniz
+ * @version 1.0
  */
 public class Main {
 
@@ -97,10 +100,7 @@ public class Main {
                 }
             }
         }
-        catch (IOException e) {
-            terminal.printError(e.getMessage());
-        }
-        catch (IllegalArgumentException e) {
+        catch (IOException | IllegalArgumentException e) {
             terminal.printError(e.getMessage());
         }
     }

@@ -1,6 +1,7 @@
 package main.java.main;
 
 import main.java.controller.Controller;
+import main.java.corrections.Correction;
 import main.java.human.Dozent;
 import main.java.human.Student;
 import main.java.human.Tutor;
@@ -12,6 +13,8 @@ import main.java.userinputs.Terminal;
 import java.io.IOException;
 import java.security.KeyException;
 import java.util.HashMap;
+import java.util.List;
+
 import main.java.controller.UserEnum;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
@@ -138,7 +141,7 @@ public class Main {
             int idx = cntrl.getIndex();
             Question newQuestion = new Question(userinput[1], idx);
             cntrl.addQuestion(newQuestion);
-            terminal.println("assignment (" + idx + ")");
+            terminal.println("assignment id(" + idx + ")");
         }
         catch (KeyAlreadyExistsException e) {
             terminal.printError(e.getMessage());
@@ -247,6 +250,27 @@ public class Main {
         int mark = parser.parseNumber(userInput[FOUR]);
         String comment = userInput[userInput.length - 1];
         cntrl.addReview(questionId, studentId, mark, comment, tutor);
+    }
+
+    private static void listReview(String[] userInput) {
+        if (userInput.length != TWO) {
+            terminal.printError("wrong input");
+            return;
+        }
+        try {
+            List<Correction> corrections = cntrl.getCorrections(parser.parseNumber(userInput[ONE]));
+            for (int i = 0; i < corrections.size(); i++) {
+                Correction current = corrections.get(i);
+                String tutor = current.getProducer() + ": ";
+                String review = current.getText() + " ";
+                String numbers = "[" + current.getOriginal().getProducer() + " " + current.getMark() + "]";
+                terminal.println(tutor + review + numbers);
+            }
+        }
+        catch (IllegalArgumentException e) {
+            terminal.printError(e.getMessage());
+        }
+
     }
 
     private static void fillMap() {

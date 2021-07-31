@@ -9,6 +9,7 @@ import main.java.texts.Text;
 import javax.management.openmbean.KeyAlreadyExistsException;
 import java.security.KeyException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -106,7 +107,7 @@ public class Controller {
      * @param handIn the handIn
      */
     public void handIn(HandIn handIn) throws KeyException, IllegalAccessException {
-        if (!textList.containsKey(handIn.getOriginal())) {
+        if (!textList.containsKey(handIn.getOriginal())) { //obsolete
             throw new KeyException("Question does not exist");
         }
         int handinpos = containsHandIn(handIn);
@@ -121,7 +122,7 @@ public class Controller {
         else {
             HandIn searched = (HandIn) oldText[handinpos][ZERO];
             if (searched.isCorrected()) {
-                throw new IllegalAccessException("Is already corrected");
+                throw new IllegalAccessException("Is already review");
             }
             oldText[handinpos][ZERO] = handIn;
             textList.put(handIn.getOriginal(), oldText);
@@ -132,7 +133,7 @@ public class Controller {
     private int containsHandIn(HandIn input) {
         Text[][] old = textList.get(input.getOriginal());
         for (int i = 0; i < old.length; i++) {
-            if (old[i][0].equals(input)) {
+            if (old[i][0].getProducer().equals(input.getProducer())) {
                 return i;
             }
         }
@@ -168,7 +169,7 @@ public class Controller {
     public void addReview(int questionId, int studentId, int mark, String comment, String tutor) {
         Question key = getQuestion(questionId);
         Text[][] handIns = textList.get(key);
-        int idx = findStudentSolution(studentId, key, handIns);
+        int idx = findStudentSolution(studentId, handIns);
         if (idx == -1) {
             throw new IllegalArgumentException("no such solution");
         }
@@ -177,7 +178,7 @@ public class Controller {
         textList.put(key, handIns);
     }
 
-    private int findStudentSolution(int studentId, Question key, Text[][] handIns) {
+    private int findStudentSolution(int studentId, Text[][] handIns) {
         for (int i = 0; i < handIns.length; i++) {
             Student student = (Student) handIns[i][ZERO].getProducer();
             if (student.getId() == studentId) {
@@ -195,6 +196,19 @@ public class Controller {
             }
         }
         throw new IllegalArgumentException("tutor doesn't exist");
+    }
+
+    public List<Correction> getCorrections(int keyId) {
+        Question key = getQuestion(keyId);
+        Text[][] texts = textList.get(key);
+        List<Correction> retCollection = null;
+
+        for (int i = 0; i < texts.length; i++) {
+            if (((HandIn) texts[i][ZERO]).isCorrected()) {
+                retCollection.add(((Correction) texts[i][ONE]));
+            }
+        }
+        return  retCollection;
     }
 
 }

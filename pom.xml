@@ -8,7 +8,10 @@
     <artifactId>Abschlussaufgabe_1</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+
     <build>
+        <sourceDirectory>${project.basedir}/src</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -20,7 +23,7 @@
                             <classpathPrefix>lib/</classpathPrefix>
                             <classpathLayoutType>repository</classpathLayoutType>
                             <useUniqueVersions>false</useUniqueVersions>
-                            <mainClass>Main.main </mainClass>
+                            <mainClass>main.main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -49,8 +49,8 @@ public class PlagiarismFinder {
             int count = 0;
             String aproxLongest ="";
             for (int j = 0; j < originalHandIn.length(); j++) {
-                Character current = newHandIn.charAt(i + count);
-                if (current.equals(originalHandIn.charAt(j))) {
+                char current = newHandIn.charAt(i + count);
+                if (current == originalHandIn.charAt(j)) {
                     aproxLongest = aproxLongest + current;
                     count++;
                     if (aproxLongest.length() > plagiarismCollection.getLength()) {
@@ -63,7 +63,12 @@ public class PlagiarismFinder {
                     count = 0;
                 }
                 if (i + count > newHandIn.length() - 1) {
-                    break;
+                    if (aproxLongest.length() > plagiarismCollection.getLength()) {
+                        plagiarismCollection.setBiggestString(aproxLongest);
+                        plagiarismCollection.setLength(aproxLongest.length());
+                    }
+                    aproxLongest ="";
+                    count = 0;
                 }
             }
         }

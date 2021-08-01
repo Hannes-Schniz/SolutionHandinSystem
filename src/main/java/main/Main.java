@@ -13,8 +13,7 @@ import main.java.userinputs.Parser;
 import main.java.userinputs.Terminal;
 import java.io.IOException;
 import java.security.KeyException;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import main.java.controller.UserEnum;
 
@@ -107,6 +106,7 @@ public class Main {
                                 searchPlagiarism(userInput);
                                 break;
                             case ADD_PLAGIARISM:
+                                addPlagiarism(userInput);
                                 break;
                             case SUMMARY_TASKS:
                                 break;
@@ -129,7 +129,7 @@ public class Main {
         }
     }
 
-    private static void setup() {
+    public static void setup() {
         cntrl = new Controller();
         terminal = new Terminal();
         parser = new Parser();
@@ -137,7 +137,7 @@ public class Main {
         fillMap();
     }
 
-    private static void addAssignment(String[] userinput) {
+    public static void addAssignment(String[] userinput) {
         if (userinput.length != TWO) {
             terminal.printError("wrong input");
             return;
@@ -153,7 +153,7 @@ public class Main {
         }
     }
 
-    private static void printUser(UserEnum key) {
+    public static void printUser(UserEnum key) {
         User[] listUsers = cntrl.getUserList(key);
         String[] nameString = new String[listUsers.length];
         if (key.equals(UserEnum.STUDENT)) {
@@ -170,19 +170,19 @@ public class Main {
 
     }
 
-    private static void listInstructors() {
+    public static void listInstructors() {
         if (cntrl.hasUser(UserEnum.DOZENT)) {
             printUser(UserEnum.DOZENT);
         }
     }
 
-    private static void listTutors() {
+    public static void listTutors() {
         if (cntrl.hasUser(UserEnum.TUTOR)) {
             printUser(UserEnum.TUTOR);
         }
     }
 
-    private static void addStudent(String[] userInput) {
+    public static void addStudent(String[] userInput) {
         if (userInput.length != THREE) {
             terminal.printError("wrong input");
             return;
@@ -195,13 +195,13 @@ public class Main {
         cntrl.addUser(new Student(userInput[ONE], parser.parseNumber(userInput[TWO])));
     }
 
-    private static void listStudents() {
+    public static void listStudents() {
         if (cntrl.hasUser(UserEnum.STUDENT)) {
             printUser(UserEnum.STUDENT);
         }
     }
 
-    private static void handIn(String[] userInput) {
+    public static void handIn(String[] userInput) {
         if (userInput.length != FOUR) {
             terminal.printError("wrong input");
             return;
@@ -229,7 +229,7 @@ public class Main {
         throw new ClassNotFoundException("No such Student found");
     }
 
-    private static void listSolutions(String[] userInput) {
+    public static void listSolutions(String[] userInput) {
         if (userInput.length != TWO) {
             terminal.printError("wrong input");
             return;
@@ -244,7 +244,7 @@ public class Main {
         }
     }
 
-    private static void addReview(String[] userInput) {
+    public static void addReview(String[] userInput) {
         if (userInput.length != SIX) {
             terminal.printError("wrong input");
             return;
@@ -257,7 +257,7 @@ public class Main {
         cntrl.addReview(questionId, studentId, mark, comment, tutor);
     }
 
-    private static void listReview(String[] userInput) {
+    public static void listReview(String[] userInput) {
         if (userInput.length != TWO) {
             terminal.printError("wrong input");
             return;
@@ -278,13 +278,19 @@ public class Main {
 
     }
 
-    private static void searchPlagiarism(String[] userInput) {
+    public static void searchPlagiarism(String[] userInput) {
         if (userInput.length != TWO) {
             terminal.printError("wrong input");
             return;
         }
         try {
-            List<Datacollection> plagiarisms = cntrl.search(parser.parseNumber(userInput[ONE]));
+            ArrayList<Datacollection> plagiarisms = cntrl.search(parser.parseNumber(userInput[ONE]));
+            plagiarisms.sort(new Comparator<Datacollection>() {
+                @Override
+                public int compare(Datacollection o1, Datacollection o2) {
+                    return Double.compare(o2.getPercent(), o1.getPercent());
+                }
+            });
             for (int i = 0; i < plagiarisms.size(); i++) {
                 Datacollection current = plagiarisms.get(i);
                 if (current.getPercent() > 0) {
@@ -300,6 +306,23 @@ public class Main {
                     terminal.println(studentOne + studentTwo + longestString + count + percent);
                 }
             }
+        }
+        catch (IllegalArgumentException e) {
+            terminal.printError(e.getMessage());
+        }
+    }
+
+    public static void addPlagiarism(String[] userInput) {
+        if (userInput.length != FOUR) {
+            terminal.printError("wrong input");
+            return;
+        }
+        try {
+            int studentId = parser.parseNumber(userInput[TWO]);
+            int questionId = parser.parseNumber(userInput[THREE]);
+            String name = userInput[ONE];
+            String print = cntrl.markPlagiarism(studentId, questionId, name);
+            terminal.println(print);
         }
         catch (IllegalArgumentException e) {
             terminal.printError(e.getMessage());

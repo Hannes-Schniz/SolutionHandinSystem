@@ -2,6 +2,7 @@ package main.java.controller;
 
 import main.java.corrections.Correction;
 import main.java.corrections.Datacollection;
+import main.java.corrections.Plagiarism;
 import main.java.human.*;
 import main.java.texts.HandIn;
 import main.java.texts.Question;
@@ -215,7 +216,7 @@ public class Controller {
         return  retCollection;
     }
 
-    public List<Datacollection> search(int questionID) {
+    public ArrayList<Datacollection> search(int questionID) {
         Question key = getQuestion(questionID);
         Text[][] texFiles = textList.get(key);
         if (!isFinished(key)) {
@@ -242,6 +243,43 @@ public class Controller {
             }
         }
         return true;
+    }
+
+    public String markPlagiarism(int studentId, int questionId, String name) throws IllegalArgumentException {
+        Text[][] textFiles = textList.get(getQuestion(questionId));
+        int idx = findStudentSolution(studentId , textFiles);
+        if (idx == -1) {
+            throw new IllegalArgumentException("Student didn't hand a Solution in");
+        }
+        HandIn plag = (HandIn) textFiles[idx][ZERO];
+        Student student = (Student)plag.getProducer();
+        Text copiedSolution = textFiles[idx][ONE];
+        Tutor tutor = (Tutor) copiedSolution.getProducer();
+        String comment = ((Correction) copiedSolution).getText();
+        Dozent instructor = findDozent(name);
+        if (copiedSolution.getClass().equals(Plagiarism.class)) {
+            int mark = ((Plagiarism) copiedSolution).getOldMark();
+            Correction oldCorrection = new Correction(mark, (HandIn) textFiles[idx][ZERO], tutor, comment);
+            textFiles[idx][ONE] = oldCorrection;
+            textList.put(plag.getOriginal(), textFiles);
+            return student.getId() + " mark for " + student.getId() + " removed and grade "
+                    + oldCorrection.getMark() + " restored";
+        }
+        Plagiarism plagiarism = new Plagiarism((Correction) copiedSolution, instructor);
+        textFiles[idx][ONE] = plagiarism;
+        textList.put(plag.getOriginal(), textFiles);
+        return ((Question) plag.getOriginal()).getId() + " for "
+                + student.getId() + " marked as plagiarism";
+    }
+
+    private Dozent findDozent(String name) {
+        User[] users = userList.get(UserEnum.DOZENT);
+        for (int i = 0; i < users.length; i++) {
+            if (users[i].getName().equals(name)) {
+                return (Dozent) users[i];
+            }
+        }
+        throw new IllegalArgumentException("Instructor doesn't exist");
     }
 
 }

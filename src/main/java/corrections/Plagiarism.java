@@ -19,10 +19,9 @@ public class Plagiarism extends Correction {
     /**
      * Instantiates a new Plagiarism.
      *
-     * @param finder   the finder
      */
-    public Plagiarism(HandIn original, Tutor tutor, String comment, Dozent finder) {
-        super(MARK_FIVE, original, tutor, comment);
+    public Plagiarism(int mark, HandIn original, Tutor tutor, String comment, Dozent finder) {
+        super(mark, original, tutor, comment);
         this.finder = finder;
     }
 
@@ -30,10 +29,17 @@ public class Plagiarism extends Correction {
      * Instantiates a new Plagiarism.
      *
      * @param correction the correction
-     * @param finder     the finder
      */
     public Plagiarism(Correction correction, Dozent finder) {
-        super(MARK_FIVE, correction.getOriginal(), (Tutor) correction.getProducer(), correction.getText());
+        super(correction.getMark(), correction.getOriginal(), (Tutor) correction.getProducer(), correction.getText());
         this.finder = finder;
+    }
+
+    public int getMark() {
+        return MARK_FIVE;
+    }
+
+    public int getOldMark() {
+        return this.mark;
     }
 }

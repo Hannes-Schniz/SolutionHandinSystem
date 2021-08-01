@@ -15,7 +15,7 @@ import main.java.texts.Text;
  */
 public class Correction extends Text {
 
-    private int mark;
+    protected int mark;
 
     private int question_id;
 

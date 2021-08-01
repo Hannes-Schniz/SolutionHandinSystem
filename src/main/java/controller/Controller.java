@@ -87,10 +87,32 @@ public class Controller {
             userList.put(key, in);
         }
         else {
+            if (userExist(newUser, key)) {
+                throw new IllegalArgumentException("User already exists");
+            }
             User[] newerUser = extendUser(userList.get(key));
             newerUser[newerUser.length - ONE] = newUser;
             userList.put(key, newerUser);
         }
+    }
+
+    private boolean userExist(User user, UserEnum key) {
+        User[] list = userList.get(key);
+        if (key.equals(UserEnum.STUDENT)) {
+            for (int i = 0; i < list.length; i++) {
+                if (((Student) list[i]).getId() == ((Student) user).getId()) {
+                    return true;
+                }
+            }
+        }
+        else {
+            for (int i = 0; i < list.length; i++) {
+                if (list[i].getName().equals(user.getName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private User[] extendUser(User[] input) {

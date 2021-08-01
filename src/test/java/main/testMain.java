@@ -6,18 +6,13 @@ import main.java.corrections.Datacollection;
 import main.java.human.Dozent;
 import main.java.human.Student;
 import main.java.human.Tutor;
-import main.java.human.User;
-import main.java.main.Main;
 import main.java.texts.HandIn;
 import main.java.texts.Question;
 import main.java.userinputs.Parser;
 import main.java.userinputs.Terminal;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -124,6 +119,28 @@ public class testMain {
                     terminal.println(studentOne + studentTwo + longestString + count + percent);
                 }
             }
+        }
+        catch (IllegalArgumentException e) {
+            terminal.printError(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testDoubleName() {
+        testSetup();
+        try {
+            cntrl.addUser(new Dozent("Pete"));
+        }
+        catch (IllegalArgumentException e) {
+            terminal.printError(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testDoubleId() {
+        testSetup();
+        try {
+            cntrl.addUser(new Student("Pete", 66666));
         }
         catch (IllegalArgumentException e) {
             terminal.printError(e.getMessage());

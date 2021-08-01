@@ -11,13 +11,9 @@ import main.java.texts.HandIn;
 import main.java.texts.Question;
 import main.java.userinputs.Parser;
 import main.java.userinputs.Terminal;
-import java.io.IOException;
-import java.security.KeyException;
 import java.util.*;
 
 import main.java.controller.UserEnum;
-
-import javax.management.openmbean.KeyAlreadyExistsException;
 
 /**
  * The type Main.
@@ -122,7 +118,7 @@ public class Main {
                     }
                 }
             }
-            catch (IOException | IllegalArgumentException e) {
+            catch (IllegalArgumentException e) {
                 terminal.println(e.getMessage());
             }
         }
@@ -155,7 +151,7 @@ public class Main {
             cntrl.addQuestion(newQuestion);
             terminal.println("assignment id(" + idx + ")");
         }
-        catch (KeyAlreadyExistsException e) {
+        catch (IllegalArgumentException e) {
             terminal.printError(e.getMessage());
         }
     }
@@ -244,7 +240,7 @@ public class Main {
             HandIn newHandIn = new HandIn(userInput[THREE], question, getStudent(studentId));
             cntrl.handIn(newHandIn);
         }
-        catch (ClassNotFoundException | IllegalArgumentException | IllegalAccessException | KeyException e) {
+        catch (ClassNotFoundException | IllegalArgumentException | IllegalAccessException e) {
             terminal.printError(e.getMessage());
         }
     }

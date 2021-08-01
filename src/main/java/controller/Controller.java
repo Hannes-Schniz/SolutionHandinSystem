@@ -7,9 +7,6 @@ import main.java.human.*;
 import main.java.texts.HandIn;
 import main.java.texts.Question;
 import main.java.texts.Text;
-
-import javax.management.openmbean.KeyAlreadyExistsException;
-import java.security.KeyException;
 import java.util.*;
 
 /**
@@ -125,11 +122,11 @@ public class Controller {
      * Add question to the Hashmap.
      *
      * @param question the question
-     * @throws KeyAlreadyExistsException the key already exists exception
+     * @throws IllegalArgumentException the key already exists exception
      */
-    public void addQuestion(Question question) throws KeyAlreadyExistsException {
+    public void addQuestion(Question question) throws IllegalArgumentException {
         if (textList.containsKey(question)) {
-            throw new KeyAlreadyExistsException("Question already exists");
+            throw new IllegalArgumentException("Question already exists");
         }
         textList.put(question, new Text[ZERO][TWO]);
     }
@@ -138,12 +135,12 @@ public class Controller {
      * Lets a student hand in a Solution and adds it to the Hashmap.
      *
      * @param handIn the handIn
-     * @throws KeyException           the key exception
+     * @throws IllegalArgumentException           the key exception
      * @throws IllegalAccessException the illegal access exception
      */
-    public void handIn(HandIn handIn) throws KeyException, IllegalAccessException {
+    public void handIn(HandIn handIn) throws IllegalArgumentException, IllegalAccessException {
         if (!textList.containsKey(handIn.getOriginal())) { //obsolete
-            throw new KeyException("Question does not exist");
+            throw new IllegalArgumentException("Question does not exist");
         }
         int handinpos = containsHandIn(handIn);
         Text[][] oldText = textList.get(handIn.getOriginal());

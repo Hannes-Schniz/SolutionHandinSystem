@@ -41,7 +41,11 @@ public class Parser {
 
         for (int i = ZERO; i < input.length(); i++) {
             if (input.charAt(i) == ' ') {
-                if (spaces != ZERO) {
+                if (spaces == ZERO) {
+                    returnArray[ZERO] = parted;
+                    parted = "";
+                }
+                else {
                     returnArray = extendArray(returnArray);
                     returnArray[returnArray.length - ONE] = parted;
                     parted = "";

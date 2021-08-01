@@ -1,8 +1,6 @@
 package main.java.userinputs;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.Scanner;
 
 /**
  * The type Terminal.
@@ -15,13 +13,13 @@ public class Terminal {
     /**
      * The Reader.
      */
-    BufferedReader reader;
+    Scanner scanner;
 
     /**
      * Instantiates a new Terminal.
      */
     public Terminal() {
-        reader = new BufferedReader(new InputStreamReader(System.in));
+        scanner = new Scanner(System.in);
     }
 
     /**
@@ -48,10 +46,9 @@ public class Terminal {
      * Readln string.
      *
      * @return the string
-     * @throws IOException the io exception
      */
-    public String readln() throws IOException {
-        return reader.readLine();
+    public String readln() {
+        return scanner.nextLine();
     }
 
     /**

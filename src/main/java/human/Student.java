@@ -2,10 +2,13 @@ package main.java.human;
 
 /**
  * The type Student.
+ *
+ * @author Hannes Schniz
+ * @version 1.0
  */
 public class Student extends User {
 
-    private int id;
+    private final int id;
 
     /**
      * Instantiates a new Student.

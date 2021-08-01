@@ -18,6 +18,7 @@ public class Text {
      * Instantiates a new Text.
      *
      * @param text the text
+     * @param producer the producer of the text
      */
     public Text(String text, User producer) {
         this.text = text;

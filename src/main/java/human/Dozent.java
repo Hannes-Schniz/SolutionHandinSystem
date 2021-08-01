@@ -2,6 +2,9 @@ package main.java.human;
 
 /**
  * The type Dozent.
+ *
+ * @author Hannes Schniz
+ * @version 1.0
  */
 public class Dozent extends User {
 

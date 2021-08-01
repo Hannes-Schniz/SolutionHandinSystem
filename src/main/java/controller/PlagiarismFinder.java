@@ -12,8 +12,6 @@ import main.java.texts.HandIn;
  */
 public class PlagiarismFinder {
 
-    private static final String EMPTY_STRING = "";
-
     private static final int ONE_HUNDRET = 100;
 
     private final Datacollection plagiarismCollection;
@@ -34,15 +32,13 @@ public class PlagiarismFinder {
      */
     public Datacollection findPlagiarism(HandIn handIn, HandIn original) {
 
-        String find = EMPTY_STRING;
-
         String originalHandIn = original.getText();
 
         String newHandIn = handIn.getText();
 
         for (int i = 0; i < newHandIn.length(); i++) {
             int count = 0;
-            String aproxLongest ="";
+            String aproxLongest = "";
             for (int j = 0; j < originalHandIn.length(); j++) {
                 char current = newHandIn.charAt(i + count);
                 if (current == originalHandIn.charAt(j)) {
@@ -54,7 +50,7 @@ public class PlagiarismFinder {
                     }
                 }
                 else {
-                    aproxLongest ="";
+                    aproxLongest = "";
                     count = 0;
                 }
                 if (i + count > newHandIn.length() - 1) {
@@ -62,7 +58,7 @@ public class PlagiarismFinder {
                         plagiarismCollection.setBiggestString(aproxLongest);
                         plagiarismCollection.setLength(aproxLongest.length());
                     }
-                    aproxLongest ="";
+                    aproxLongest = "";
                     count = 0;
                 }
             }
@@ -76,7 +72,7 @@ public class PlagiarismFinder {
 
     private double calculatePercent(HandIn handIn, String find) {
 
-        double calculated =(double) find.length() / (double) handIn.getText().length() * ONE_HUNDRET;
+        double calculated = (double) find.length() / (double) handIn.getText().length() * ONE_HUNDRET;
 
         double preReturn =  java.lang.Math.round(calculated * ONE_HUNDRET);
         return preReturn / ONE_HUNDRET;

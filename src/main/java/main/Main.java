@@ -270,7 +270,7 @@ public class Main {
         for (HandIn handIn : handIns) {
             Student student = (Student) handIn.getProducer();
             String name = student.getName() + " ";
-            String id = '(' + String.valueOf(student.getId() + "): ");
+            String id = '(' + student.getId() + "): ";
             String text = handIn.getText();
             terminal.println(name + id + text);
         }
@@ -309,7 +309,8 @@ public class Main {
             for (Correction current : corrections) {
                 String tutor = current.getProducer().getName() + ": ";
                 String review = current.getText() + " ";
-                String numbers = "[" + ((Student) current.getOriginal().getProducer()).getId() + " " + current.getMark() + "]";
+                String numbers = "[" + ((Student) current.getOriginal().getProducer()).getId()
+                        + " " + current.getMark() + "]";
                 terminal.println(tutor + review + numbers);
             }
         }
@@ -331,7 +332,7 @@ public class Main {
         }
         try {
             ArrayList<Datacollection> plagiarisms = cntrl.search(parser.parseNumber(userInput[ONE]));
-            plagiarisms.sort(new Comparator<Datacollection>() {
+            plagiarisms.sort(new Comparator<>() {
                 @Override
                 public int compare(Datacollection o1, Datacollection o2) {
                     return Double.compare(o2.getPercent(), o1.getPercent());

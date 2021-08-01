@@ -344,7 +344,7 @@ public class Controller {
             throw new IllegalArgumentException("Student didn't hand a Solution in");
         }
         HandIn plag = (HandIn) textFiles[idx][ZERO];
-        Student student = (Student)plag.getProducer();
+        Student student = (Student) plag.getProducer();
         Text copiedSolution = textFiles[idx][ONE];
         Tutor tutor = (Tutor) copiedSolution.getProducer();
         String comment = copiedSolution.getText();

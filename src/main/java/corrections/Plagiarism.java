@@ -41,6 +41,11 @@ public class Plagiarism extends Correction {
         this.finder = finder;
     }
 
+    /**
+     * Gets mark.
+     *
+     * @return the mark
+     */
     public int getMark() {
         return MARK_FIVE;
     }

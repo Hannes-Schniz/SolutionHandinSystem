@@ -10,9 +10,9 @@ import main.java.human.Student;
  */
 public class Datacollection {
 
-    private static int MINUS_ONE = -1;
+    private static final int MINUSONE = -1;
 
-    private static String EMPTY_STRING = "";
+    private static final String EMPTY_STRING = "";
 
     private String biggestString;
 
@@ -30,44 +30,8 @@ public class Datacollection {
     public Datacollection() {
 
         this.biggestString = EMPTY_STRING;
-        this.length = MINUS_ONE;
-        this.percent = MINUS_ONE;
-    }
-
-    /**
-     * Gets minus one.
-     *
-     * @return the minus one
-     */
-    public static int getMinusOne() {
-        return MINUS_ONE;
-    }
-
-    /**
-     * Sets minus one.
-     *
-     * @param minusOne the minus one
-     */
-    public static void setMinusOne(int minusOne) {
-        MINUS_ONE = minusOne;
-    }
-
-    /**
-     * Gets empty string.
-     *
-     * @return the empty string
-     */
-    public static String getEmptyString() {
-        return EMPTY_STRING;
-    }
-
-    /**
-     * Sets empty string.
-     *
-     * @param emptyString the empty string
-     */
-    public static void setEmptyString(String emptyString) {
-        EMPTY_STRING = emptyString;
+        this.length = MINUSONE;
+        this.percent = MINUSONE;
     }
 
     /**
@@ -122,15 +86,6 @@ public class Datacollection {
      */
     public void setPercent(double percent) {
         this.percent = percent;
-    }
-
-    /**
-     * Has plagiarism boolean.
-     *
-     * @return the boolean
-     */
-    public boolean hasPlagiarism() {
-        return this.length != MINUS_ONE;
     }
 
     /**

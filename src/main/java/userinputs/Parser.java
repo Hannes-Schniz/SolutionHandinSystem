@@ -87,6 +87,11 @@ public class Parser {
 
     }
 
+    /**
+     * Check name.
+     *
+     * @param input the input
+     */
     public void checkName(String input) {
         if (input.matches("[A-Z]+[a-z]*")) {
             return;

@@ -70,8 +70,7 @@ public class testMain {
         addPlagTest();
         String[] userInput = {"list-solutions", "1"};
         List<Correction> corrections = cntrl.getCorrections(parser.parseNumber(userInput[1]));
-        for (int i = 0; i < corrections.size(); i++) {
-            Correction current = corrections.get(i);
+        for (Correction current : corrections) {
             String tutor = current.getProducer().getName() + ": ";
             String review = current.getText() + " ";
             String numbers = "[" + ((Student) current.getOriginal().getProducer()).getId() + " " + current.getMark() + "]";
@@ -83,8 +82,7 @@ public class testMain {
     public void testSummary() {
         testSetup();
         ArrayList<String[]> list = cntrl.getSummary();
-        for (int i = 0; i < list.size(); i++) {
-            String[] lines = list.get(i);
+        for (String[] lines : list) {
             if (lines[2].length() < 4 && !lines[2].equals("-")) {
                 lines[2] = lines[2] + "0";
             }
@@ -104,8 +102,7 @@ public class testMain {
                     return Double.compare(o2.getPercent(), o1.getPercent());
                 }
             });
-            for (int i = 0; i < plagiarisms.size(); i++) {
-                Datacollection current = plagiarisms.get(i);
+            for (Datacollection current : plagiarisms) {
                 if (current.getPercent() > 0) {
                     String studentOne = current.getStudentOne().getId() + " ";
                     String studentTwo = current.getStudentTwo().getId() + " ";

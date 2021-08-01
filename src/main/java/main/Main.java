@@ -221,10 +221,10 @@ public class Main {
 
     private static Student getStudent(int studentId) throws ClassNotFoundException {
         User[] studentList = cntrl.getUserList(UserEnum.STUDENT);
-        for (int i = 0; i < studentList.length; i++) {
-            Student current = (Student) studentList[i];
+        for (User user : studentList) {
+            Student current = (Student) user;
             if (current.getId() == studentId) {
-                return (Student) studentList[i];
+                return (Student) user;
             }
         }
         throw new ClassNotFoundException("No such Student found");
@@ -236,11 +236,11 @@ public class Main {
             return;
         }
         HandIn[] handIns = cntrl.getSolutions(parser.parseNumber(userInput[ONE]));
-        for (int i = 0; i < handIns.length; i++) {
-            Student student = (Student) handIns[i].getProducer();
+        for (HandIn handIn : handIns) {
+            Student student = (Student) handIn.getProducer();
             String name = student.getName() + " ";
             String id = '(' + String.valueOf(student.getId() + "): ");
-            String text = handIns[i].getText();
+            String text = handIn.getText();
             terminal.println(name + id + text);
         }
     }
@@ -265,11 +265,10 @@ public class Main {
         }
         try {
             List<Correction> corrections = cntrl.getCorrections(parser.parseNumber(userInput[ONE]));
-            for (int i = 0; i < corrections.size(); i++) {
-                Correction current = corrections.get(i);
+            for (Correction current : corrections) {
                 String tutor = current.getProducer().getName() + ": ";
                 String review = current.getText() + " ";
-                String numbers = "[" + ((Student)current.getOriginal().getProducer()).getId() + " " + current.getMark() + "]";
+                String numbers = "[" + ((Student) current.getOriginal().getProducer()).getId() + " " + current.getMark() + "]";
                 terminal.println(tutor + review + numbers);
             }
         }
@@ -292,8 +291,7 @@ public class Main {
                     return Double.compare(o2.getPercent(), o1.getPercent());
                 }
             });
-            for (int i = 0; i < plagiarisms.size(); i++) {
-                Datacollection current = plagiarisms.get(i);
+            for (Datacollection current : plagiarisms) {
                 if (current.getPercent() > 0) {
                     String studentOne = current.getStudentOne().getId() + " ";
                     String studentTwo = current.getStudentTwo().getId() + " ";
@@ -332,13 +330,12 @@ public class Main {
 
     public static void summary() {
         ArrayList<String[]> list = cntrl.getSummary();
-        for (int i = 0; i < list.size(); i++) {
-            String[] lines = list.get(i);
+        for (String[] lines : list) {
             if (lines[TWO].length() < FOUR && !lines[TWO].equals("-")) {
                 lines[TWO] = lines[TWO] + "0";
             }
             terminal.println(lines[ZERO] + ": " + lines[ONE] + " [" + lines[TWO] + ", "
-            + lines[THREE] + " / " + lines[FOUR] + "]");
+                    + lines[THREE] + " / " + lines[FOUR] + "]");
         }
     }
 

@@ -34,11 +34,9 @@ public class Controller {
 
     private static final int FIVE = 5;
 
-    private HashMap<UserEnum, User[]> userList;
+    private final HashMap<UserEnum, User[]> userList;
 
-    private HashMap<Question, Text[][]> textList;
-
-    private PlagiarismFinder finder;
+    private final HashMap<Question, Text[][]> textList;
 
     /**
      * Instantiates a new Controller.
@@ -99,15 +97,15 @@ public class Controller {
     private boolean userExist(User user, UserEnum key) {
         User[] list = userList.get(key);
         if (key.equals(UserEnum.STUDENT)) {
-            for (int i = 0; i < list.length; i++) {
-                if (((Student) list[i]).getId() == ((Student) user).getId()) {
+            for (User value : list) {
+                if (((Student) value).getId() == ((Student) user).getId()) {
                     return true;
                 }
             }
         }
         else {
-            for (int i = 0; i < list.length; i++) {
-                if (list[i].getName().equals(user.getName())) {
+            for (User value : list) {
+                if (value.getName().equals(user.getName())) {
                     return true;
                 }
             }
@@ -235,9 +233,9 @@ public class Controller {
 
     private Tutor findTutor(String name) {
         User[] tutorList = userList.get(UserEnum.TUTOR);
-        for (int i = 0; i < tutorList.length; i++) {
-            if (tutorList[i].getName().equals(name)) {
-                return (Tutor) tutorList[i];
+        for (User user : tutorList) {
+            if (user.getName().equals(name)) {
+                return (Tutor) user;
             }
         }
         throw new IllegalArgumentException("tutor doesn't exist");
@@ -248,9 +246,9 @@ public class Controller {
         Text[][] texts = textList.get(key);
         ArrayList<Correction> retCollection = new ArrayList<Correction>();
 
-        for (int i = 0; i < texts.length; i++) {
-            if (((HandIn) texts[i][ZERO]).isCorrected()) {
-                retCollection.add(((Correction) texts[i][ONE]));
+        for (Text[] text : texts) {
+            if (((HandIn) text[ZERO]).isCorrected()) {
+                retCollection.add(((Correction) text[ONE]));
             }
         }
         return  retCollection;
@@ -266,7 +264,7 @@ public class Controller {
         for (int i = 0; i < texFiles.length; i++) {
             for (int j = 0; j < texFiles.length; j++) {
                 if (i != j) {
-                    finder = new PlagiarismFinder(key);
+                    PlagiarismFinder finder = new PlagiarismFinder();
                     Datacollection data = finder.findPlagiarism((HandIn) texFiles[i][ZERO], (HandIn) texFiles[j][ZERO]);
                     dataList.add(data);
                 }
@@ -277,8 +275,8 @@ public class Controller {
 
     private boolean isFinished(Question key) {
         Text[][] textFiles = textList.get(key);
-        for (int i = 0; i < textFiles.length; i++) {
-            if (!((HandIn) textFiles[i][ZERO]).isCorrected()) {
+        for (Text[] textFile : textFiles) {
+            if (!((HandIn) textFile[ZERO]).isCorrected()) {
                 return false;
             }
         }
@@ -317,9 +315,9 @@ public class Controller {
         if (!userList.containsKey(UserEnum.DOZENT)) {
             throw new IllegalArgumentException("No Instructors present");
         }
-        for (int i = 0; i < users.length; i++) {
-            if (users[i].getName().equals(name)) {
-                return (Dozent) users[i];
+        for (User user : users) {
+            if (user.getName().equals(name)) {
+                return (Dozent) user;
             }
         }
         throw new IllegalArgumentException("Instructor doesn't exist");
@@ -328,19 +326,18 @@ public class Controller {
     public ArrayList<String[]> getSummary() {
         ArrayList<Question> questionList = getQuestion();
         ArrayList<String[]> returnList = new ArrayList<>();
-        for (int i = 0; i < questionList.size(); i++) {
+        for (Question question : questionList) {
             String[] workingString = new String[FIVE];
-            workingString[ZERO] = String.valueOf(questionList.get(i).getId());
-            workingString[ONE] = questionList.get(i).getText();
-            double arit = arithmic(questionList.get(i));
+            workingString[ZERO] = String.valueOf(question.getId());
+            workingString[ONE] = question.getText();
+            double arit = arithmic(question);
             if (arit == -1) {
                 workingString[TWO] = "-";
-            }
-            else {
+            } else {
                 workingString[TWO] = String.valueOf(arit);
             }
-            workingString[THREE] = String.valueOf(getCorrected(questionList.get(i)));
-            workingString[FOUR] = String.valueOf(textList.get(questionList.get(i)).length);
+            workingString[THREE] = String.valueOf(getCorrected(question));
+            workingString[FOUR] = String.valueOf(textList.get(question).length);
             returnList.add(workingString);
 
         }
@@ -353,9 +350,9 @@ public class Controller {
         if (textFiles.length < 1) {
             return -1;
         }
-        for (int i = 0; i < textFiles.length; i++) {
-            if (((HandIn) textFiles[i][ZERO]).isCorrected()) {
-                mark = mark + ((Correction) textFiles[i][ONE]).getMark();
+        for (Text[] textFile : textFiles) {
+            if (((HandIn) textFile[ZERO]).isCorrected()) {
+                mark = mark + ((Correction) textFile[ONE]).getMark();
             }
         }
         mark = mark / (textFiles.length - 1);
@@ -366,8 +363,8 @@ public class Controller {
     private int getCorrected(Question question) {
         Text[][] textFiles = textList.get(question);
         int corrected = 0;
-        for (int i = 0; i < textFiles.length; i++) {
-            if (((HandIn) textFiles[i][ZERO]).isCorrected()) {
+        for (Text[] textFile : textFiles) {
+            if (((HandIn) textFile[ZERO]).isCorrected()) {
                 corrected++;
             }
         }

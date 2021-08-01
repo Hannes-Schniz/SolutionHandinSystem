@@ -14,7 +14,7 @@ public class Plagiarism extends Correction {
 
     private static final int MARK_FIVE = 5;
 
-    private Dozent finder;
+    private final Dozent finder;
 
     /**
      * Instantiates a new Plagiarism.

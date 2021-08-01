@@ -18,17 +18,13 @@ public class PlagiarismFinder {
 
     private static final int ONE_HUNDRET = 100;
 
-    private final Question originalQuestion;
-
     private final Datacollection plagiarismCollection;
 
     /**
      * Instantiates a new Plagiarism finder.
      *
-     * @param originalQuestion the original
      */
-    public PlagiarismFinder(Question originalQuestion) {
-        this.originalQuestion = originalQuestion;
+    public PlagiarismFinder() {
         this.plagiarismCollection = new Datacollection();
     }
 

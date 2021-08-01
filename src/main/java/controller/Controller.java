@@ -12,8 +12,6 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 import java.security.KeyException;
 import java.util.*;
 
-import static java.lang.Float.NaN;
-
 /**
  * The type Controller.
  *
@@ -40,7 +38,6 @@ public class Controller {
 
     /**
      * Instantiates a new Controller.
-     *
      */
     public Controller() {
         this.userList = new HashMap<>();
@@ -51,13 +48,18 @@ public class Controller {
      * Gets user list.
      *
      * @param key the Key
-     *
      * @return user list
      */
     public User[] getUserList(UserEnum key) {
         return userList.get(key);
     }
 
+    /**
+     * Has user boolean.
+     *
+     * @param key the key
+     * @return the boolean
+     */
     public boolean hasUser(UserEnum key) {
         return userList.containsKey(key);
     }
@@ -123,6 +125,7 @@ public class Controller {
      * Add question to the Hashmap.
      *
      * @param question the question
+     * @throws KeyAlreadyExistsException the key already exists exception
      */
     public void addQuestion(Question question) throws KeyAlreadyExistsException {
         if (textList.containsKey(question)) {
@@ -135,6 +138,8 @@ public class Controller {
      * Lets a student hand in a Solution and adds it to the Hashmap.
      *
      * @param handIn the handIn
+     * @throws KeyException           the key exception
+     * @throws IllegalAccessException the illegal access exception
      */
     public void handIn(HandIn handIn) throws KeyException, IllegalAccessException {
         if (!textList.containsKey(handIn.getOriginal())) { //obsolete
@@ -170,6 +175,12 @@ public class Controller {
         return -1;
     }
 
+    /**
+     * Gets question.
+     *
+     * @param id the id
+     * @return the question
+     */
     public Question getQuestion(int id) {
         Set<Question> questionArray = textList.keySet();
         for (Question question : questionArray) {
@@ -180,11 +191,16 @@ public class Controller {
         throw new IllegalArgumentException("Question id does not exist");
     }
 
+    /**
+     * Gets question.
+     *
+     * @return the question
+     */
     public ArrayList<Question> getQuestion() {
         Set<Question> questionArray = textList.keySet();
         ArrayList<Question> returnList = new ArrayList<>();
         returnList.addAll(questionArray);
-        returnList.sort(new Comparator<Question>() {
+        returnList.sort(new Comparator<>() {
             @Override
             public int compare(Question o1, Question o2) {
                 return Integer.compare(o1.getId(), o2.getId());
@@ -193,10 +209,21 @@ public class Controller {
         return returnList;
     }
 
+    /**
+     * Gets index.
+     *
+     * @return the index
+     */
     public int getIndex() {
         return textList.size() + 1;
     }
 
+    /**
+     * Get solutions hand in [ ].
+     *
+     * @param questionId the question id
+     * @return the hand in [ ]
+     */
     public HandIn[] getSolutions(int questionId) {
         if (textList.containsKey(getQuestion(questionId))) {
             Text[][] working = textList.get(getQuestion(questionId));
@@ -209,6 +236,15 @@ public class Controller {
         throw new IllegalArgumentException("no such Question");
     }
 
+    /**
+     * Add review.
+     *
+     * @param questionId the question id
+     * @param studentId  the student id
+     * @param mark       the mark
+     * @param comment    the comment
+     * @param tutor      the tutor
+     */
     public void addReview(int questionId, int studentId, int mark, String comment, String tutor) {
         Question key = getQuestion(questionId);
         Text[][] handIns = textList.get(key);
@@ -241,10 +277,16 @@ public class Controller {
         throw new IllegalArgumentException("tutor doesn't exist");
     }
 
+    /**
+     * Gets corrections.
+     *
+     * @param keyId the key id
+     * @return the corrections
+     */
     public List<Correction> getCorrections(int keyId) {
         Question key = getQuestion(keyId);
         Text[][] texts = textList.get(key);
-        ArrayList<Correction> retCollection = new ArrayList<Correction>();
+        ArrayList<Correction> retCollection = new ArrayList<>();
 
         for (Text[] text : texts) {
             if (((HandIn) text[ZERO]).isCorrected()) {
@@ -254,13 +296,19 @@ public class Controller {
         return  retCollection;
     }
 
+    /**
+     * Search array list.
+     *
+     * @param questionID the question id
+     * @return the array list
+     */
     public ArrayList<Datacollection> search(int questionID) {
         Question key = getQuestion(questionID);
         Text[][] texFiles = textList.get(key);
         if (!isFinished(key)) {
             throw new IllegalArgumentException("not all submissions are corrected yet!");
         }
-        ArrayList<Datacollection> dataList = new ArrayList<Datacollection>();
+        ArrayList<Datacollection> dataList = new ArrayList<>();
         for (int i = 0; i < texFiles.length; i++) {
             for (int j = 0; j < texFiles.length; j++) {
                 if (i != j) {
@@ -283,6 +331,15 @@ public class Controller {
         return true;
     }
 
+    /**
+     * Mark plagiarism string.
+     *
+     * @param studentId  the student id
+     * @param questionId the question id
+     * @param name       the name
+     * @return the string
+     * @throws IllegalArgumentException the illegal argument exception
+     */
     public String markPlagiarism(int studentId, int questionId, String name) throws IllegalArgumentException {
         Text[][] textFiles = textList.get(getQuestion(questionId));
         int idx = findStudentSolution(studentId , textFiles);
@@ -293,7 +350,7 @@ public class Controller {
         Student student = (Student)plag.getProducer();
         Text copiedSolution = textFiles[idx][ONE];
         Tutor tutor = (Tutor) copiedSolution.getProducer();
-        String comment = ((Correction) copiedSolution).getText();
+        String comment = copiedSolution.getText();
         Dozent instructor = findDozent(name);
         if (copiedSolution.getClass().equals(Plagiarism.class)) {
             int mark = ((Plagiarism) copiedSolution).getOldMark();
@@ -306,7 +363,7 @@ public class Controller {
         Plagiarism plagiarism = new Plagiarism((Correction) copiedSolution, instructor);
         textFiles[idx][ONE] = plagiarism;
         textList.put(plag.getOriginal(), textFiles);
-        return ((Question) plag.getOriginal()).getId() + " for "
+        return plag.getOriginal().getId() + " for "
                 + student.getId() + " marked as plagiarism";
     }
 
@@ -323,6 +380,11 @@ public class Controller {
         throw new IllegalArgumentException("Instructor doesn't exist");
     }
 
+    /**
+     * Gets summary.
+     *
+     * @return the summary
+     */
     public ArrayList<String[]> getSummary() {
         ArrayList<Question> questionList = getQuestion();
         ArrayList<String[]> returnList = new ArrayList<>();

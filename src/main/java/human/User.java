@@ -8,7 +8,7 @@ package main.java.human;
  */
 public abstract class User {
 
-    private String name;
+    private final String name;
 
     /**
      * Instantiates a new User.
@@ -26,15 +26,6 @@ public abstract class User {
      */
     public String getName() {
         return this.name;
-    }
-
-    /**
-     * Set name.
-     *
-     * @param name the name
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
 }

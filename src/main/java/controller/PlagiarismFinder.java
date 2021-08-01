@@ -22,7 +22,6 @@ public class PlagiarismFinder {
 
     /**
      * Instantiates a new Plagiarism finder.
-     *
      */
     public PlagiarismFinder() {
         this.plagiarismCollection = new Datacollection();
@@ -31,6 +30,8 @@ public class PlagiarismFinder {
     /**
      * Find plagiarism.
      *
+     * @param handIn   the hand in
+     * @param original the original
      * @return the Datacollection
      */
     public Datacollection findPlagiarism(HandIn handIn, HandIn original) {

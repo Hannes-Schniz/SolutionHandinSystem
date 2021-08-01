@@ -8,7 +8,7 @@ package main.java.texts;
  */
 public class Question extends Text {
 
-    private int id;
+    private final int id;
 
     /**
      * Instantiates a new Question.
@@ -28,14 +28,5 @@ public class Question extends Text {
      */
     public int getId() {
         return id;
-    }
-
-    /**
-     * Sets id.
-     *
-     * @param id the id
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 }

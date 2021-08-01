@@ -133,18 +133,38 @@ public class Datacollection {
         return this.length != MINUS_ONE;
     }
 
+    /**
+     * Gets student one.
+     *
+     * @return the student one
+     */
     public Student getStudentOne() {
         return studentOne;
     }
 
+    /**
+     * Sets student one.
+     *
+     * @param studentOne the student one
+     */
     public void setStudentOne(Student studentOne) {
         this.studentOne = studentOne;
     }
 
+    /**
+     * Gets student two.
+     *
+     * @return the student two
+     */
     public Student getStudentTwo() {
         return studentTwo;
     }
 
+    /**
+     * Sets student two.
+     *
+     * @param studentTwo the student two
+     */
     public void setStudentTwo(Student studentTwo) {
         this.studentTwo = studentTwo;
     }

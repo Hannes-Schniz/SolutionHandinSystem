@@ -10,9 +10,9 @@ import main.java.human.User;
  */
 public class Text {
 
-    private String text;
+    private final String text;
 
-    private User producer;
+    private final User producer;
 
     /**
      * Instantiates a new Text.
@@ -31,17 +31,6 @@ public class Text {
      */
     public String getText() {
         return text;
-    }
-
-    /**
-     * Sets text.
-     *
-     * @param text     the text
-     * @param producer the producer
-     */
-    public void setText(String text, User producer) {
-        this.text = text;
-        this.producer = producer;
     }
 
     /**

@@ -39,8 +39,6 @@ public class Main {
 
     private static final int SIX = 6;
 
-    private static final int FIVE = 5;
-
     private static Controller cntrl;
 
     private static Terminal terminal;
@@ -130,6 +128,9 @@ public class Main {
         }
     }
 
+    /**
+     * Sets .
+     */
     public static void setup() {
         cntrl = new Controller();
         terminal = new Terminal();
@@ -138,6 +139,11 @@ public class Main {
         fillMap();
     }
 
+    /**
+     * Add assignment.
+     *
+     * @param userinput the userinput
+     */
     public static void addAssignment(String[] userinput) {
         if (userinput.length != TWO) {
             terminal.printError("wrong input");
@@ -154,6 +160,11 @@ public class Main {
         }
     }
 
+    /**
+     * Print user.
+     *
+     * @param key the key
+     */
     public static void printUser(UserEnum key) {
         User[] listUsers = cntrl.getUserList(key);
         String[] nameString = new String[listUsers.length];
@@ -171,18 +182,29 @@ public class Main {
 
     }
 
+    /**
+     * List instructors.
+     */
     public static void listInstructors() {
         if (cntrl.hasUser(UserEnum.DOZENT)) {
             printUser(UserEnum.DOZENT);
         }
     }
 
+    /**
+     * List tutors.
+     */
     public static void listTutors() {
         if (cntrl.hasUser(UserEnum.TUTOR)) {
             printUser(UserEnum.TUTOR);
         }
     }
 
+    /**
+     * Add student.
+     *
+     * @param userInput the user input
+     */
     public static void addStudent(String[] userInput) {
         if (userInput.length != THREE) {
             terminal.printError("wrong input");
@@ -196,12 +218,20 @@ public class Main {
         cntrl.addUser(new Student(userInput[ONE], parser.parseNumber(userInput[TWO])));
     }
 
+    /**
+     * List students.
+     */
     public static void listStudents() {
         if (cntrl.hasUser(UserEnum.STUDENT)) {
             printUser(UserEnum.STUDENT);
         }
     }
 
+    /**
+     * Hand in.
+     *
+     * @param userInput the user input
+     */
     public static void handIn(String[] userInput) {
         if (userInput.length != FOUR) {
             terminal.printError("wrong input");
@@ -230,6 +260,11 @@ public class Main {
         throw new ClassNotFoundException("No such Student found");
     }
 
+    /**
+     * List solutions.
+     *
+     * @param userInput the user input
+     */
     public static void listSolutions(String[] userInput) {
         if (userInput.length != TWO) {
             terminal.printError("wrong input");
@@ -245,6 +280,11 @@ public class Main {
         }
     }
 
+    /**
+     * Add review.
+     *
+     * @param userInput the user input
+     */
     public static void addReview(String[] userInput) {
         if (userInput.length != SIX) {
             terminal.printError("wrong input");
@@ -258,6 +298,11 @@ public class Main {
         cntrl.addReview(questionId, studentId, mark, comment, tutor);
     }
 
+    /**
+     * List review.
+     *
+     * @param userInput the user input
+     */
     public static void listReview(String[] userInput) {
         if (userInput.length != TWO) {
             terminal.printError("wrong input");
@@ -278,6 +323,11 @@ public class Main {
 
     }
 
+    /**
+     * Search plagiarism.
+     *
+     * @param userInput the user input
+     */
     public static void searchPlagiarism(String[] userInput) {
         if (userInput.length != TWO) {
             terminal.printError("wrong input");
@@ -311,6 +361,11 @@ public class Main {
         }
     }
 
+    /**
+     * Add plagiarism.
+     *
+     * @param userInput the user input
+     */
     public static void addPlagiarism(String[] userInput) {
         if (userInput.length != FOUR) {
             terminal.printError("wrong input");
@@ -328,6 +383,9 @@ public class Main {
         }
     }
 
+    /**
+     * Summary.
+     */
     public static void summary() {
         ArrayList<String[]> list = cntrl.getSummary();
         for (String[] lines : list) {

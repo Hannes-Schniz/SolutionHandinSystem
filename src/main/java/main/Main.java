@@ -109,6 +109,7 @@ public class Main {
                                 addPlagiarism(userInput);
                                 break;
                             case SUMMARY_TASKS:
+                                summary();
                                 break;
                             case RESET:
                                 cntrl = new Controller();
@@ -299,7 +300,7 @@ public class Main {
                     String longestString = current.getBiggestString() + " ";
                     String count = current.getLength() + " ";
                     String percent = String.valueOf(current.getPercent());
-                    if (percent.length() < FIVE) {
+                    if (percent.substring(percent.indexOf('.')).length() < THREE) {
                         percent = percent + "0";
                     }
                     percent = percent + " ";
@@ -326,6 +327,18 @@ public class Main {
         }
         catch (IllegalArgumentException e) {
             terminal.printError(e.getMessage());
+        }
+    }
+
+    public static void summary() {
+        ArrayList<String[]> list = cntrl.getSummary();
+        for (int i = 0; i < list.size(); i++) {
+            String[] lines = list.get(i);
+            if (lines[TWO].length() < FOUR && !lines[TWO].equals("-")) {
+                lines[TWO] = lines[TWO] + "0";
+            }
+            terminal.println(lines[ZERO] + ": " + lines[ONE] + " [" + lines[TWO] + ", "
+            + lines[THREE] + " / " + lines[FOUR] + "]");
         }
     }
 

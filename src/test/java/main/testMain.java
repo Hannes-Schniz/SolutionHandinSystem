@@ -27,47 +27,30 @@ public class testMain {
     private static Controller cntrl;
     private static Terminal terminal;
 
-
-    @Test
-    public void testSearchPlag() {
-        testSetup();
-        ArrayList<Datacollection> plags = cntrl.search(1);
-
-        Collections.sort(plags, new Comparator<Datacollection>() {
-            @Override
-            public int compare(Datacollection o1, Datacollection o2) {
-                return Double.compare(o2.getPercent(), o1.getPercent());
-            }
-        });
-        return;
-    }
-
     private void testSetup() {
         parser = new Parser();
         cntrl = new Controller();
         terminal = new Terminal();
-        Dozent Pete = new Dozent("Pete");
-        Tutor Bryn = new Tutor("Bryn");
-        Tutor Cassidy = new Tutor("Cassidy");
         Student Gael = new Student("Gael", 66666);
         Student Dakota = new Student("Dakota", 23442);
         Student Finley = new Student("Finley", 32000);
-        cntrl.addUser(Pete);
-        cntrl.addUser(Bryn);
-        cntrl.addUser(Cassidy);
+        cntrl.addUser(new Dozent("Pete"));
+        cntrl.addUser(new Tutor("Bryn"));
+        cntrl.addUser(new Tutor("Cassidy"));
         cntrl.addUser(Gael);
         cntrl.addUser(Dakota);
         cntrl.addUser(Finley);
-        cntrl.addQuestion(new Question("kajhfkaghf", cntrl.getIndex()));
+        cntrl.addQuestion(new Question("Kompilieren_und_Ausführen", cntrl.getIndex()));
+        cntrl.addQuestion(new Question("Ein-_und_Ausgabe", cntrl.getIndex()));
         try {
             cntrl.handIn(new HandIn("Die_Lösung_ist_42", cntrl.getQuestion(1), Gael));
             cntrl.handIn(new HandIn("Glaub_es_ist_42", cntrl.getQuestion(1), Dakota));
-            cntrl.handIn(new HandIn("Kein_Ahnung", cntrl.getQuestion(1), Finley));
+            cntrl.handIn(new HandIn("Keine_Ahnung", cntrl.getQuestion(1), Finley));
             cntrl.addReview(1, 66666, 2, "Ganz_gut_gelöst,_weiter_so!", "Cassidy");
             cntrl.addReview(1, 32000, 5, "Das_war_wohl_nix.", "Bryn");
             cntrl.addReview(1, 23442, 2, "Ganz_gut_gelöst,_weiter_so!", "Cassidy");
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
     }
 
@@ -100,4 +83,51 @@ public class testMain {
             terminal.println(tutor + review + numbers);
         }
     }
+
+    @Test
+    public void testSummary() {
+        testSetup();
+        ArrayList<String[]> list = cntrl.getSummary();
+        for (int i = 0; i < list.size(); i++) {
+            String[] lines = list.get(i);
+            if (lines[2].length() < 4 && !lines[2].equals("-")) {
+                lines[2] = lines[2] + "0";
+            }
+            terminal.println(lines[0] + ": " + lines[1] + " [" + lines[2] + ", "
+                    + lines[3] + " / " + lines[4] + "]");
+        }
+    }
+
+    @Test
+    public void searchPlag() {
+        testSetup();
+        try {
+            ArrayList<Datacollection> plagiarisms = cntrl.search(parser.parseNumber("1"));
+            plagiarisms.sort(new Comparator<Datacollection>() {
+                @Override
+                public int compare(Datacollection o1, Datacollection o2) {
+                    return Double.compare(o2.getPercent(), o1.getPercent());
+                }
+            });
+            for (int i = 0; i < plagiarisms.size(); i++) {
+                Datacollection current = plagiarisms.get(i);
+                if (current.getPercent() > 0) {
+                    String studentOne = current.getStudentOne().getId() + " ";
+                    String studentTwo = current.getStudentTwo().getId() + " ";
+                    String longestString = current.getBiggestString() + " ";
+                    String count = current.getLength() + " ";
+                    String percent = String.valueOf(current.getPercent());
+                    if (percent.substring(percent.indexOf('.')).length() < 3) {
+                        percent = percent + "0";
+                    }
+                    percent = percent + " ";
+                    terminal.println(studentOne + studentTwo + longestString + count + percent);
+                }
+            }
+        }
+        catch (IllegalArgumentException e) {
+            terminal.printError(e.getMessage());
+        }
+    }
+
 }

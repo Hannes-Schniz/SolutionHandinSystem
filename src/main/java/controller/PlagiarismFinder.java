@@ -86,13 +86,4 @@ public class PlagiarismFinder {
         double preReturn =  java.lang.Math.round(calculated * ONE_HUNDRET);
         return preReturn / ONE_HUNDRET;
     }
-
-    /**
-     * Gets original question.
-     *
-     * @return the original question
-     */
-    public Question getOriginalQuestion() {
-        return originalQuestion;
-    }
 }

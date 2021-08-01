@@ -10,10 +10,9 @@ import main.java.texts.Text;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 import java.security.KeyException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static java.lang.Float.NaN;
 
 /**
  * The type Controller.
@@ -28,6 +27,12 @@ public class Controller {
     private static final int ONE = 1;
 
     private static final int TWO = 2;
+
+    private static final int THREE = 3;
+
+    private static final int FOUR = 4;
+
+    private static final int FIVE = 5;
 
     private HashMap<UserEnum, User[]> userList;
 
@@ -155,6 +160,19 @@ public class Controller {
         throw new IllegalArgumentException("Question id does not exist");
     }
 
+    public ArrayList<Question> getQuestion() {
+        Set<Question> questionArray = textList.keySet();
+        ArrayList<Question> returnList = new ArrayList<>();
+        returnList.addAll(questionArray);
+        returnList.sort(new Comparator<Question>() {
+            @Override
+            public int compare(Question o1, Question o2) {
+                return Integer.compare(o1.getId(), o2.getId());
+            }
+        });
+        return returnList;
+    }
+
     public int getIndex() {
         return textList.size() + 1;
     }
@@ -274,12 +292,64 @@ public class Controller {
 
     private Dozent findDozent(String name) {
         User[] users = userList.get(UserEnum.DOZENT);
+        if (!userList.containsKey(UserEnum.DOZENT)) {
+            throw new IllegalArgumentException("No Instructors present");
+        }
         for (int i = 0; i < users.length; i++) {
             if (users[i].getName().equals(name)) {
                 return (Dozent) users[i];
             }
         }
         throw new IllegalArgumentException("Instructor doesn't exist");
+    }
+
+    public ArrayList<String[]> getSummary() {
+        ArrayList<Question> questionList = getQuestion();
+        ArrayList<String[]> returnList = new ArrayList<>();
+        for (int i = 0; i < questionList.size(); i++) {
+            String[] workingString = new String[FIVE];
+            workingString[ZERO] = String.valueOf(questionList.get(i).getId());
+            workingString[ONE] = questionList.get(i).getText();
+            double arit = arithmic(questionList.get(i));
+            if (arit == -1) {
+                workingString[TWO] = "-";
+            }
+            else {
+                workingString[TWO] = String.valueOf(arit);
+            }
+            workingString[THREE] = String.valueOf(getCorrected(questionList.get(i)));
+            workingString[FOUR] = String.valueOf(textList.get(questionList.get(i)).length);
+            returnList.add(workingString);
+
+        }
+        return returnList;
+    }
+
+    private double arithmic(Question question) {
+        Text[][] textFiles = textList.get(question);
+        double mark = 0;
+        if (textFiles.length < 1) {
+            return -1;
+        }
+        for (int i = 0; i < textFiles.length; i++) {
+            if (((HandIn) textFiles[i][ZERO]).isCorrected()) {
+                mark = mark + ((Correction) textFiles[i][ONE]).getMark();
+            }
+        }
+        mark = mark / (textFiles.length - 1);
+        mark = java.lang.Math.round(mark * 100);
+        return mark / 100;
+    }
+
+    private int getCorrected(Question question) {
+        Text[][] textFiles = textList.get(question);
+        int corrected = 0;
+        for (int i = 0; i < textFiles.length; i++) {
+            if (((HandIn) textFiles[i][ZERO]).isCorrected()) {
+                corrected++;
+            }
+        }
+        return corrected;
     }
 
 }
